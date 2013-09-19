@@ -31,6 +31,9 @@ D = retain_max_strain(D); % i.e. out of 3 eigen values retain only maximal one %
 D_ = tri2vert_strain(D, objseq, param); % could be commented temporarily % 
 D_(:,1) = 0.0;
 
+% Export obj sequence with the strain visualization
+export_strain_vis(D_, objseq, param);
+
 % Compute vertex adjacency matrix
 objseq.adj_vert = triangulation2adjacency(objseq.triangles, objseq.vertices);
 

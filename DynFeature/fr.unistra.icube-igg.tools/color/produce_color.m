@@ -6,5 +6,5 @@ function [ colorPerVal ] = produce_color( val  )
     H=(ones(size(val))-val./vMax)*2/3;
     S=ones(size(val));
     V=ones(size(val));
-    colorPerVal = 255 * hsv2rgb([H,S,V]);
+    colorPerVal = floor(255 * hsv2rgb([H,S,V]));
 end % function

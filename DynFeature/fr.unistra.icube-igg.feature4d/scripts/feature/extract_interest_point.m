@@ -1,11 +1,11 @@
-function [ is_interest_point ] = extract_interest_point(objseq, octaveset, vi, fi, param, response_fn)
+function [ is_interest_point ] = extract_interest_point(objseq, octaveset, vi, fi, param, response_fn_scale, response_fn_spacetime)
 
     for i = param.octave_step : param.octave_step : param.smooth_num        
         for j = 1  : param.octave_step : param.smooth_num            
             
             is_interest_point = true;
             
-            feature_response_curr = response_fn(param, octaveset, i, j, fi, vi);                    
+            feature_response_curr = response_fn_scale(param, octaveset, i, j, fi, vi);                    
             
             if(param.extrema_scale)
                 % Condition #1: Extrema in scale
@@ -19,7 +19,7 @@ function [ is_interest_point ] = extract_interest_point(objseq, octaveset, vi, f
                             continue;
                         end
                         
-                        feature_response_neighb = response_fn(param, octaveset, i + k, j + l, fi, vi);
+                        feature_response_neighb = response_fn_scale(param, octaveset, i + k, j + l, fi, vi);
                         if(feature_response_neighb > feature_response_curr)
                             is_interest_point = false; 
                             end_loop = 1; break;      
@@ -30,6 +30,7 @@ function [ is_interest_point ] = extract_interest_point(objseq, octaveset, vi, f
             
             % Condition #2: Extrema in space-time
             if(param.extrema_space_time)
+                % Find one ring neighbours in space
                 one_ring_space = find(objseq.adj_vert(vi, :) > 0);
                 time_start = 1;
                 time_end = objseq.n_f;
@@ -39,12 +40,13 @@ function [ is_interest_point ] = extract_interest_point(objseq, octaveset, vi, f
                 if(fi < objseq.n_f)
                     time_end = fi + 1;
                 end % if
+                % One ring neighbours in time
                 one_ring_time = time_start : time_end;
                 
                 end_loop = false;
                 for frame_id = one_ring_time
                     for vert_id = [one_ring_space vi];  % add 
-                        feature_response_neighb = response_fn(param, octaveset, i, j, frame_id, vert_id);
+                        feature_response_neighb = response_fn_spacetime(param, octaveset, i, j, frame_id, vert_id);
                         if(feature_response_neighb >= feature_response_curr)
                             if(vert_id~=vi)
                                 is_interest_point = false; end_loop = true; break; 

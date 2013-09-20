@@ -17,11 +17,12 @@ param = config('cylinder');
 
 % Transform obj sequence into matlab readable format and load it (conditional)
 objseq = objseq2mat(param);
+objseq.n_f = param.n_f;
 load(param.data_file);
 
 % Force to use certain subset of frames in .obj sequence
-objseq.n_f = 80;
-param.n_f = objseq.n_f;
+%objseq.n_f = 10;
+%param.n_f = objseq.n_f;
 
 % Recompute stain (conditional) and/or load it into environment
 [D] = recompute_strain(objseq, param); % could be commented temporarily % 
@@ -51,7 +52,9 @@ for vi = 1 : objseq.n_v
     %spinner(param, vi); % spinner to show the progress of computation
     
     for fi = 1 : objseq.n_f
-        is_interest_point = extract_interest_point(objseq, octaveset, vi, fi, param, @diff_of_gauss);   
+        % Check if vertex (vi) in frame (fi) is an extrema in any of the
+        % scales both in space-time and scale domains
+        is_interest_point = extract_interest_point(objseq, octaveset, vi, fi, param, param.response_fn_scale, param.response_fn_spacetime);   
         %is_interest_point = extract_interest_point(objseq, octaveset, vi, fi, param, @pure_strain);
         % If iterest point detected write it to console
         if(is_interest_point)

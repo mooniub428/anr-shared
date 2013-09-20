@@ -103,7 +103,7 @@ end%if
 % Write the Header
 %
 topHeaderStr = strcat('ply\nformat %s 1.0\ncomment created by PLY exporter. ',datestr(now, 'yy'));
-topHeaderStr = strcat(topHeaderStr, ' lsiit-igg\n');
+topHeaderStr = strcat(topHeaderStr, '\n');
 fprintf(fid, topHeaderStr, format);
 fprintf(fid,'element vertex %d\n', nV);
 fprintf(fid,'property float x\nproperty float y\nproperty float z\n');

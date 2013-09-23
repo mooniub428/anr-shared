@@ -1,7 +1,9 @@
 function [ is_interest_point ] = extract_interest_point(objseq, octaveset, vi, fi, param, response_fn_scale, response_fn_spacetime)
 
+global featpts;
+
     for i = param.octave_step : param.octave_step : param.smooth_num        
-        for j = 1  : param.octave_step : param.smooth_num            
+        for j = 1  : param.octave_step : param.smooth_num                        
             
             is_interest_point = true;
             
@@ -60,8 +62,11 @@ function [ is_interest_point ] = extract_interest_point(objseq, octaveset, vi, f
             
             cur_octave = cell2mat(octaveset(i,j));
             
-            if(is_interest_point && (cur_octave(vi, fi) > param.strain_min) )
-                [i, j]
+            % Feature detection stage
+            if(is_interest_point && (cur_octave(vi, fi) > param.strain_min) && (feature_response_curr > param.feature_response_min) )
+                %[i, j]
+                %feature_response_curr
+                featpts( numel(featpts) + 1, 1 ) = {[vi fi feature_response_curr i j]};
                 return;
             end
         end % for

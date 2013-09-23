@@ -33,6 +33,8 @@ param.response_fn_spacetime = @diff_of_gauss;
 % Define space-time window
 param.window = boxcar_window(1, 1); % 1-ring neigh. both in space and time
 
+% Frame number to start with
+param.f0 = 1;
 % Number of frames to consider in animation sequence
 param.n_f = 40;
 
@@ -47,6 +49,7 @@ param.extrema_scale = true;
 
 % Minimal magnitude of principal strain taken into consideration
 param.strain_min = 0.01;
+param.feature_response_min = 0.02;
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 param.spins = cell(7);

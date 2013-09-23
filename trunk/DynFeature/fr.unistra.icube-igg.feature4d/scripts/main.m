@@ -6,6 +6,9 @@
 % Indexing based on scale invariant interest points, Mikolajczyk and Schmid;
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
+% Define empty cell array to store extracted feature points (if any)
+global featpts;
+featpts = cell(0, 1);
 
 %
 % Load dependencies
@@ -45,13 +48,13 @@ octaveset = do_anim_smoothing(D_, param, objseq); % could be commented temporari
 % (DoG)
 disp('Extract interest points ::');
 interest_point = zeros(objseq.n_v, objseq.n_f);
-for vi = 1 : objseq.n_v
+for fi = 1 : objseq.n_f
     
     %clc;
     %disp([num2str(100 * vi / objseq.n_v, 2) '%..'])
     %spinner(param, vi); % spinner to show the progress of computation
     
-    for fi = 1 : objseq.n_f
+    for vi = 1 : objseq.n_v
         % Check if vertex (vi) in frame (fi) is an extrema in any of the
         % scales both in space-time and scale domains
         is_interest_point = extract_interest_point(objseq, octaveset, vi, fi, param, param.response_fn_scale, param.response_fn_spacetime);   
@@ -59,7 +62,10 @@ for vi = 1 : objseq.n_v
         % If iterest point detected write it to console
         if(is_interest_point)
             interest_point(vi, fi) = true;
-            disp(['[' int2str(vi) ', ' int2str(fi) ']']); % vertex id and frame id
+            %disp(['[' int2str(vi) ', ' int2str(fi) ']']); % vertex id and frame id
         end % if
     end % for
 end % for
+
+%
+cell2mat(featpts)

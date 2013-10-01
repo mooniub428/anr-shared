@@ -11,17 +11,20 @@ if( ~exist(param.data_file, 'file') || ~exist('objseq', 'var') || param.recomput
     listing = dir([param.data_folder 'obj/']);
     num_files = numel(listing);
     
-    V = -1;
     
+    matlabpool('open', 6);
     % skip '.' and '..' in dir output
-    for i = 3 : num_files
+    next_file = [param.data_folder 'obj/' listing(3).name];
+    [vertices, triangles] = read_wobj(next_file);
+    V = zeros( size(vertices, 1), 3, (num_files - 2));
+    V(:,:,1) = vertices;
+            
+    parfor i = 4 : num_files    
         next_file = [param.data_folder 'obj/' listing(i).name];
-        [vertices, triangles] = read_wobj(next_file);
-        if(V == -1)
-            V = zeros( size(vertices, 1), 3, (num_files - 2));            
-        end % if
+        [vertices, triangles] = read_wobj(next_file);                                    
         V(:,:, i-2) = vertices;
     end % for
+    matlabpool close;
     
     disp(['Saving ' param.data_file]);
     

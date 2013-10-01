@@ -41,8 +41,11 @@ if(~exist('octaveset', 'var'))
                 % and find adjacent vertices
                 adj_vertices = find(objseq.adj_vert(vi, :) > 0);
                 % Iterate over frames as well
-                for fi = 1 : param.n_f                    
-                    new_octave(vi, fi) = do_local_smoothing(start_octave, window, vi, fi, adj_vertices, param);
+                for fi = 1 : param.n_f         
+                    std_dev_sigma = compute_deviation(2, j);
+                    std_dev_tau = compute_deviation(2, i);
+                    norm_factor = std_dev_sigma * std_dev_tau;
+                    new_octave(vi, fi) = norm_factor * do_local_smoothing(start_octave, window, vi, fi, adj_vertices, param);
                 end % for each frame
             end % for each vertex                        
                         

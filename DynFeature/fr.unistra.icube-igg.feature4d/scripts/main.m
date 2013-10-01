@@ -15,7 +15,8 @@ featpts = cell(0, 1);
 load_coretools();
 
 % Load configuration
-param = config('cylinder');
+%param = config('cylinder');
+param = config('cylinder-with-stop');
 %param = config('horse-gallop');
 
 % Transform obj sequence into matlab readable format and load it (conditional)
@@ -25,7 +26,7 @@ load(param.data_file);
 
 % Force to use certain subset of frames in .obj sequence
 %objseq.n_f = 10;
-%param.n_f = objseq.n_f;
+objseq.n_f = param.n_f;
 
 % Recompute stain (conditional) and/or load it into environment
 [D] = recompute_strain(objseq, param); % could be commented temporarily % 
@@ -36,7 +37,7 @@ D_ = tri2vert_strain(D, objseq, param); % could be commented temporarily %
 D_(:,1) = 0.0;
 
 % Export obj sequence with the strain visualization
-export_strain_vis(D_, objseq, param);
+%export_strain_vis(D_, objseq, param);
 
 % Compute vertex adjacency matrix
 objseq.adj_vert = triangulation2adjacency(objseq.triangles, objseq.vertices);
@@ -48,6 +49,7 @@ octaveset = do_anim_smoothing(D_, param, objseq); % could be commented temporari
 % (DoG)
 disp('Extract interest points ::');
 interest_point = zeros(objseq.n_v, objseq.n_f);
+tic
 for fi = 1 : objseq.n_f
     
     %clc;
@@ -66,6 +68,12 @@ for fi = 1 : objseq.n_f
         end % if
     end % for
 end % for
-
+toc
 %
 cell2mat(featpts)
+
+%
+vertices_with_spheres = export_feature_vis( D_, objseq, param, featpts );
+
+% Export strain color during the animations
+export_anim_color( D_, vertices_with_spheres );

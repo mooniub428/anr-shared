@@ -49,7 +49,7 @@ param.extrema_scale = true;
 
 % Minimal magnitude of principal strain taken into consideration
 param.strain_min = 0.01;
-param.feature_response_min = 0.02;
+param.feature_response_min = 0.04;
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 param.spins = cell(7);

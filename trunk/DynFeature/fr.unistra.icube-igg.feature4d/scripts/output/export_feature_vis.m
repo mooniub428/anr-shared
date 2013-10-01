@@ -39,9 +39,11 @@ end
 for fi = 2 : objseq.n_f
     % Serial number of the frame
     id = int2str(fi);
-    if (fi < 10)
-        id = ['0' id];
-    end % if
+    
+    %if (fi < 10)
+    %    id = ['0' id];
+    %end % if
+    
     % Filename of the exported frame
     filename = [export_dir basename id '.obj'];
     

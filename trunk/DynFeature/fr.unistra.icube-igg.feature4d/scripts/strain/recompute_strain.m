@@ -23,7 +23,7 @@ if(dorecompute)
     S = zeros(objseq.n_t, 3, objseq.n_f);
     S_tensor = zeros(objseq.n_t, 3, 3, objseq.n_f);
     D = zeros(objseq.n_t, 3, objseq.n_f);
-    
+        
     for f_i = 2 : objseq.n_f % iterate over all frames
         disp(['Recompute strain :: Processing frame ' int2str(f_i)]);
         for t_i = 1 : objseq.n_t % compute shear values for each triangle
@@ -41,7 +41,7 @@ if(dorecompute)
             %max_strain = E(:, id_of_max);
             %S(t_i, :, f_i) = max_strain;
         end % for
-    end % for
+    end % for    
     
     %tri_strain = S;
     save(param.data_file, 'objseq', 'D');    

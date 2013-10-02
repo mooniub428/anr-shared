@@ -22,7 +22,7 @@ param = config('cylinder');
 
 % Transform obj sequence into matlab readable format and load it (conditional)
 objseq = objseq2mat(param);
-objseq.n_f = param.n_f;
+%objseq.n_f = param.n_f;
 load(param.data_file);
 
 % Force to use certain subset of frames in .obj sequenc
@@ -82,11 +82,16 @@ for fi = 1 : objseq.n_f
         feature_response(vi, fi) = param.response_fn_spacetime(param, octaveset, 1, 1, fi, vi);
     end % for
 end % for
-%
+
+% Print feature points to the console
 cell2mat(featpts)
 
-%
+% Export all the frames OBJ files augmented with spheres on feature point
+% locations
 vertices_with_spheres = export_feature_vis( D_, objseq, param, featpts );
 
+% Export extracted features (raw featpts i.e. without filtering)
+export_featpts_mat(featpts, param);
+
 % Export strain color during the animations
-export_anim_color( feature_response, vertices_with_spheres );
+export_anim_color( feature_response, vertices_with_spheres, param );

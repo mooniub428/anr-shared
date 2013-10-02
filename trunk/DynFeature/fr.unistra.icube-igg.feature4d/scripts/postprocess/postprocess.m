@@ -1,8 +1,10 @@
 % Data set name
 param.data_name = 'horse';
+param.do_scale_norm = 'true';
 
 cd('..');
 % Load precomputed data
+load_precomputed_data(param);
 
 % Threshold for feature response
 eps = 0.4;

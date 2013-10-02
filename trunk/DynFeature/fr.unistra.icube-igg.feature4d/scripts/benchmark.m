@@ -13,8 +13,7 @@ for i = 1 : n
         main_f(cell2mat(datasets(i)), true);
     catch err
         err % just print the error to console
-    end
-    clear;
+    end    
 end % for
 
 % 2
@@ -24,6 +23,5 @@ for i = 1 : n
         main_f(cell2mat(datasets(i)), false);
     catch err
         err % just print the error to console
-    end
-    clear;
+    end    
 end % for

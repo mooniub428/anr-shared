@@ -1,4 +1,4 @@
-function [ featpts_filtered ] = postprocess_featpts( featpts, eps )
+function [ featpts_filtered ] = postprocess_featpts( featpts, eps, objseq, D_, feature_response )
 
 % number of feature pts
 n = numel(featpts);

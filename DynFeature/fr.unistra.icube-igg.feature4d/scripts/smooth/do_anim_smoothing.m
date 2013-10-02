@@ -19,8 +19,9 @@ if(~exist('octaveset', 'var'))
     
     % The 1st column of the octave: smoothing with increasing "tau" only
     
+    octaveset = cell(param.smooth_num, param.smooth_num);
     
-    % Smothing loop for increasing "tau"
+    % Smothing loop for increasing "tau"    
     for i = 1 : param.smooth_num        
         disp(['Smoothing :: ' num2str(100 * i / param.smooth_num, 2) '%..'])
         if(i > 1)
@@ -45,6 +46,7 @@ if(~exist('octaveset', 'var'))
                     std_dev_sigma = compute_deviation(2, j);
                     std_dev_tau = compute_deviation(2, i);
                     norm_factor = std_dev_sigma * std_dev_tau;
+                    norm_factor = 1;
                     new_octave(vi, fi) = norm_factor * do_local_smoothing(start_octave, window, vi, fi, adj_vertices, param);
                 end % for each frame
             end % for each vertex                        
@@ -55,7 +57,7 @@ if(~exist('octaveset', 'var'))
             start_octave = new_octave;
             octaveset(i, j) = {new_octave};
         end % for each "sigma"        
-    end % for each "tau"
+    end % for each "tau"    
 end % if
 
 save(param.data_file, 'objseq', 'D_', 'octaveset'); 

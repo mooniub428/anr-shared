@@ -15,18 +15,22 @@ featpts = cell(0, 1);
 load_coretools();
 
 % Load configuration
-param = config('cylinder');
+%param = config('cylinder');
 %param = config('cylinder-with-stop');
-%param = config('horse-gallop');
+%param = config('horse');
+param = config('camel');
 
 % Transform obj sequence into matlab readable format and load it (conditional)
 objseq = objseq2mat(param);
 objseq.n_f = param.n_f;
 load(param.data_file);
 
-% Force to use certain subset of frames in .obj sequence
-%objseq.n_f = 10;
-objseq.n_f = param.n_f;
+% Force to use certain subset of frames in .obj sequenc
+if (objseq.n_f > param.n_f)
+    objseq.n_f = param.n_f;
+else
+    param.n_f = objseq.n_f;
+end % if
 
 % Recompute stain (conditional) and/or load it into environment
 [D] = recompute_strain(objseq, param); % could be commented temporarily % 
@@ -46,9 +50,10 @@ objseq.adj_vert = triangulation2adjacency(objseq.triangles, objseq.vertices);
 octaveset = do_anim_smoothing(D_, param, objseq); % could be commented temporarily %
 
 % Extract sparse interest points according to a feature response function
-% (DoG)
 disp('Extract interest points ::');
 interest_point = zeros(objseq.n_v, objseq.n_f);
+feature_response = zeros(objseq.n_v, objseq.n_f);
+
 tic
 for fi = 1 : objseq.n_f
     
@@ -59,7 +64,8 @@ for fi = 1 : objseq.n_f
     for vi = 1 : objseq.n_v
         % Check if vertex (vi) in frame (fi) is an extrema in any of the
         % scales both in space-time and scale domains
-        is_interest_point = extract_interest_point(objseq, octaveset, vi, fi, param, param.response_fn_scale, param.response_fn_spacetime);   
+        [is_interest_point] = extract_interest_point(objseq, octaveset, vi, fi, param, param.response_fn_scale, param.response_fn_spacetime);   
+        
         %is_interest_point = extract_interest_point(objseq, octaveset, vi, fi, param, @pure_strain);
         % If iterest point detected write it to console
         if(is_interest_point)
@@ -69,6 +75,13 @@ for fi = 1 : objseq.n_f
     end % for
 end % for
 toc
+
+% Get feature response at (1, 1) scale
+for fi = 1 : objseq.n_f    
+    for vi = 1 : objseq.n_v
+        feature_response(vi, fi) = param.response_fn_spacetime(param, octaveset, 1, 1, fi, vi);
+    end % for
+end % for
 %
 cell2mat(featpts)
 
@@ -76,4 +89,4 @@ cell2mat(featpts)
 vertices_with_spheres = export_feature_vis( D_, objseq, param, featpts );
 
 % Export strain color during the animations
-export_anim_color( D_, vertices_with_spheres );
+export_anim_color( feature_response, vertices_with_spheres );

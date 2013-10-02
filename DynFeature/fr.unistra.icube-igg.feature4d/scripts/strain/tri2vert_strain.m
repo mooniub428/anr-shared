@@ -8,12 +8,12 @@ function [ D_ ] = tri2vert_strain( D, objseq, param )
     disp('*');
     
     n_v = objseq.n_v;
-    D_ = zeros(n_v, param.n_f);
+    D_ = zeros(n_v, objseq.n_f);
     
     for vi = 1 : n_v
         adj_tri = sum(objseq.triangles == vi, 2);
         adj_tri_id = find(adj_tri);  
-        for fi = 1 : param.n_f
+        for fi = 1 : objseq.n_f
             D_(vi, fi) = mean(D(adj_tri_id, fi));
         end % for
     end % for

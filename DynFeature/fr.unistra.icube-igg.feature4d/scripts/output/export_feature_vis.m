@@ -4,7 +4,18 @@ function [ vertices_with_spheres ] = export_feature_vis( D_, objseq, param, feat
 radius = 4.0;      % radius of features
 
 % String constants
-export_dir = '../../fr.unistra.icube-igg.debug/featpts_vis/';
+export_dir = ['../../fr.unistra.icube-igg.debug/' param.data_name '/'];
+% Create export directory if it does not exist
+enforce_existence(export_dir);
+
+if(param.do_scale_norm)
+    export_dir = [export_dir '/norm/'];
+else
+    export_dir = [export_dir '/notnorm/'];
+end % if
+
+enforce_existence(export_dir);
+
 basename = 'frame_';
 
 % Estimate number of additional feature points needed
@@ -73,6 +84,10 @@ for fi = 2 : objseq.n_f
 end % for
 
 vertices_with_spheres = vertices;
+
+% Save feature points matrix in text file as well
+featpts_mat = cell2mat(featpts);
+save([export_dir 'featpts_.txt'], 'featpts_mat', '-ascii');
 
 end % function
 

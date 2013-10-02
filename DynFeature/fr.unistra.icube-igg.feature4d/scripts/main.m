@@ -15,10 +15,10 @@ featpts = cell(0, 1);
 load_coretools();
 
 % Load configuration
-%param = config('cylinder');
+param = config('cylinder');
 %param = config('cylinder-with-stop');
 %param = config('horse');
-param = config('camel');
+%param = config('camel');
 
 % Transform obj sequence into matlab readable format and load it (conditional)
 objseq = objseq2mat(param);

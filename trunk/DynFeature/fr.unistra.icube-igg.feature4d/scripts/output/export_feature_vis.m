@@ -88,6 +88,9 @@ vertices_with_spheres = vertices;
 % Save feature points matrix in text file as well
 featpts_mat = cell2mat(featpts);
 save([export_dir 'featpts_.txt'], 'featpts_mat', '-ascii');
+% Save other important data
+save([export_dir 'objseq.mat'], 'objseq');
+save([export_dir 'D_.mat'], 'D_');
 
 end % function
 

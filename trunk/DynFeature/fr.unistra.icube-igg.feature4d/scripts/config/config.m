@@ -36,7 +36,7 @@ param.window = boxcar_window(1, 1); % 1-ring neigh. both in space and time
 % Frame number to start with
 param.f0 = 1;
 % Number of frames to consider in animation sequence
-param.n_f = 60;
+param.n_f = 104;
 
 % Linear scale space representation)
 param.smooth_num = 10; % Total number of octaves: smooth_num x smooth_num (recommended to be < 50) 

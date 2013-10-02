@@ -28,5 +28,7 @@ end % for
 
 save([export_dir 'colors.txt'], 'C', '-ascii');
 
+save([export_dir 'feature_response.mat'], 'feature_response');
+
 end % function
 

@@ -1,7 +1,7 @@
 function [ vertices_with_spheres ] = export_feature_vis( D_, objseq, param, featpts )
 
 % Feature object parameters
-radius = 0.02 * max_diag_bbox(objseq.vertices);      % radius of features
+radius = 0.01 * max_diag_bbox(objseq.vertices);      % radius of features
 
 % String constants
 export_dir = ['../../fr.unistra.icube-igg.debug/' param.data_name '/'];

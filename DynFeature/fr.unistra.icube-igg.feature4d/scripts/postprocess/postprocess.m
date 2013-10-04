@@ -5,8 +5,8 @@
 load_coretools();
 
 % Data set name
-param.data_name = 'horse';
-param.do_scale_norm = false;
+param.data_name = 'camel';
+param.do_scale_norm = true;
 
 % Load precomputed data
 [objseq, D_, feature_response, featpts] = load_precomputed_data(param);

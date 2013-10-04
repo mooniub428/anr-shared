@@ -41,7 +41,7 @@ param.n_f = 104;
 % Linear scale space representation)
 param.smooth_num = 10; % Total number of octaves: smooth_num x smooth_num (recommended to be < 50) 
 param.octave_step = 1; % Period for sparse sampling of scales 
-param.do_scale_norm = false;
+param.do_scale_norm = true;
 
 % Find extreme in space-time
 param.extrema_space_time = true;

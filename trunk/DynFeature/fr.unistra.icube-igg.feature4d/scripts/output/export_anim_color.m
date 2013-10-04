@@ -18,7 +18,9 @@ n_with_spheres = size(vertices_with_spheres, 1); % num of vertices in augmented 
 n_f = size(feature_response, 2);
 
 % Compute color
-C = zeros(n_with_spheres, 3);
+% C = zeros(n_with_spheres, 3); % That could be used if exporting color for
+% the first frame of the animation
+C = [];
 for fi = 2 : n_f
     scalars = feature_response(:, fi);
     scalars = [scalars; max(scalars) * ones(n_with_spheres - n, 1)];

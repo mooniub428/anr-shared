@@ -4,11 +4,11 @@ addpath('../../../fr.unistra.icube-igg.tools/export');
 addpath('../../../fr.unistra.icube-igg.tools/color');
 
 % Load horse model
-%[vertices_h, triangles_h] = read_wobj('horse-gallop-reference.obj');
+[vertices_h, triangles_h] = read_wobj('horse-gallop-reference.obj');
 n_t_h = size(triangles_h, 1);
 
 % Load camel model
-%[vertices_c, triangles_c] = read_wobj('camel-gallop-reference.obj');
+[vertices_c, triangles_c] = read_wobj('camel-gallop-reference.obj');
 n_t_c = size(triangles_c, 1);
 
 % Load camel to horse triangle correspondences

@@ -1,7 +1,7 @@
-function [ vertices_with_spheres ] = export_feature_vis( D_, objseq, param, featpts )
+function [vertices_with_spheres, n_spheres, n_sphere_vertices] = export_feature_vis( D_, objseq, param, featpts )
 
 % Feature object parameters
-radius = 0.01 * max_diag_bbox(objseq.vertices);      % radius of features
+radius = 0.04 * max_diag_bbox(objseq.vertices);      % radius of features
 
 % String constants
 export_dir = ['../../fr.unistra.icube-igg.debug/' param.data_name '/'];
@@ -28,12 +28,16 @@ for fi = 2 : objseq.n_f
     end % if
 end % for
 
+%
+n_spheres = num_featpts_;
+
 % Triangulation of the mesh
 triangles = objseq.triangles;
 triangles_orig = triangles;
 
 % Load object to represent features
 [sphere_vertices, sphere_triangles] = read_wobj('UnitSphere.obj');
+n_sphere_vertices = size(sphere_vertices, 1);
 % Scale
 sphere_vertices = sphere_vertices * radius;
 
@@ -76,7 +80,10 @@ for fi = 2 : objseq.n_f
             vertices = [vertices; P + sphere_vertices];
         end % for
     end%if
-    num_rest = abs(numel(cur_featpts_) - num_featpts_);
+    
+    % 
+    num_rest = abs(numel(cur_featpts_) - num_featpts_);    
+    
     vertices = [vertices; zeros(num_rest * size(sphere_vertices,1), 3)];       
     
     % Export the mesh

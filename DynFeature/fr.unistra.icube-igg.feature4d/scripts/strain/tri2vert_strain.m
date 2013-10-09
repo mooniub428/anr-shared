@@ -19,7 +19,7 @@ function [ D_ ] = tri2vert_strain( D, objseq, param )
     end % for
 %end % if
 
-save(param.data_file, 'D', 'D_'); 
+save(param.data_file, 'objseq', 'D_'); 
 
 end % function
 

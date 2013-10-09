@@ -25,29 +25,30 @@ objseq = objseq2mat(param);
 %objseq.n_f = param.n_f;
 load(param.data_file);
 
-% Force to use certain subset of frames in .obj sequenc
-if (objseq.n_f > param.n_f)
-    objseq.n_f = param.n_f;
-else
-    param.n_f = objseq.n_f;
-end % if
+% Disable enforcement to use certain subset of frames in .obj sequence
+param.n_f = objseq.n_f; % old feature was to use param.n_f as a subset of objseq.n_f
+
 
 % Recompute stain (conditional) and/or load it into environment
-[D] = recompute_strain(objseq, param); % could be commented temporarily % 
-D = retain_max_strain(D); % i.e. out of 3 eigen values retain only maximal one % could be commented temporarily % 
-
-% Switch from triangle to vertex strain formulation  
-D_ = tri2vert_strain(D, objseq, param); % could be commented temporarily % 
-D_(:,1) = 0.0;
+if(~exist('D_', 'var') || param.recompute_all)
+    [D] = recompute_strain(objseq, param);
+    D = retain_max_strain(D); % i.e. out of 3 eigen values retain only maximal one % could be commented temporarily %
+    
+    % Switch from triangle to vertex strain formulation
+    D_ = tri2vert_strain(D, objseq, param); % could be commented temporarily %
+    D_(:,1) = 0.0;
+end % if
 
 % Export obj sequence with the strain visualization
 %export_strain_vis(D_, objseq, param);
 
 % Compute vertex adjacency matrix
-objseq.adj_vert = triangulation2adjacency(objseq.triangles, objseq.vertices);
+objseq.adj_vert = triangulation2adjacency(objseq, param, D_);
 
 % Compute linear scale space representation of the animation
-octaveset = do_anim_smoothing(D_, param, objseq); % could be commented temporarily %
+if(~exist('octaveset', 'var') || param.recompute_all || param.recompute_octaveset)
+    octaveset = do_anim_smoothing(D_, param, objseq); % could be commented temporarily %
+end %
 
 % Extract sparse interest points according to a feature response function
 disp('Extract interest points ::');

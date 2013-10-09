@@ -1,16 +1,16 @@
 function [ D ] = recompute_strain( objseq, param )
 
-% 
+% Check if array of strain data already exists in order to save computation time if possible 
 % dorecompute = 0;
-% if(~exist('D', 'var') || param.recompute_all)
+% if(~exist('D_', 'var') || param.recompute_all)
 %     dorecompute = 1;
 % elseif(~exist('S', 'var') || param.recompute_all)
 %     %dorecompute = 1;
 % elseif( size(D, 3) ~= param.n_f )
 %     dorecompute = 1;
-% end % if
-    
-dorecompute = true;
+end % if
+%dorecompute = true;
+
 if(dorecompute)
     disp('*');
     disp('Strain :: Recompute Strain');
@@ -44,7 +44,7 @@ if(dorecompute)
     end % for    
     
     %tri_strain = S;
-    save(param.data_file, 'objseq', 'D');    
+    save(param.data_file, 'objseq');    
     toc;
 else
     %S = tri_strain;

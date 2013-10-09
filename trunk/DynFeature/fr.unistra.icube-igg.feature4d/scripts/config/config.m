@@ -11,7 +11,8 @@ function param = config(data_name)
 % Set it to TRUE in order to recompute every step from scratch including full
 % pre-processing: that might be of use when changing input data sets, for
 % example
-param.recompute_all = true; 
+param.recompute_all = false; 
+param.recompute_octaveset = false;
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 param.visualize_strain = true; % export .PLY files with color-coded vertex strains
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %

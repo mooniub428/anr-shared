@@ -15,7 +15,7 @@ featpts = cell(0, 1);
 load_coretools();
 
 % Load configuration
-param = config('cylinder');
+param = config('walking_baby');
 %param = config('cylinder-with-stop');
 %param = config('horse');
 %param = config('camel');

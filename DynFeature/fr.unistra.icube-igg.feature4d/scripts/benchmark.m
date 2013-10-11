@@ -1,8 +1,10 @@
 % Data sets
-datasets{1} = 'cylinder';
-datasets{2} = 'cylinder-with-stop-large';
-datasets{3} = 'horse';
-datasets{4} = 'camel';
+datasets{1} = 'walking_michael';
+datasets{2} = 'walking_baby';
+% datasets{1} = 'cylinder';
+% datasets{2} = 'cylinder-with-stop-large';
+% datasets{3} = 'horse';
+% datasets{4} = 'camel';
 
 n = numel(datasets);
 

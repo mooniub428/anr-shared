@@ -44,7 +44,7 @@ exportPLY('camel_map.ply', vertices_c, 0, triangles_c, rgb_c);
 % Export OBJs with accompanying color text files (for 3ds Max)
 exportOBJ('horse_map.obj', vertices_h, triangles_h);
 rgb_h = rgb_h / 255;
-save('horse_color.txt', 'rgb_h');
+save('horse_color.txt', 'rgb_h', '-ascii');
 exportOBJ('camel_map.obj', vertices_c, triangles_c);
 rgb_c = rgb_c / 255;
-save('camel_color.txt', 'rgb_c');
+save('camel_color.txt', 'rgb_c', '-ascii');

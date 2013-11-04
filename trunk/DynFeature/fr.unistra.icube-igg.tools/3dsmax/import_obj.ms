@@ -11,12 +11,13 @@ Do not forget to "Tools->Evaluate all"
 function import_obj _name =
 (
 	/* local i = 1 */
-	end_index = 24
-	for i = 0 to end_index do
+	start_index = 1
+	end_index = 80
+	for i = start_index to end_index do
 	(
 		indexStr = i as string
-		fileName = _name + "_" + indexStr + ".obj"	
-		filePath = "D:/Work/Projects/interest-point-fast/fr.unistra.icube-igg.dyndat/cone_negative/obj/" + fileName
+		fileName = _name + "." + indexStr + ".obj"	
+		filePath = "d:/Work/Projects/interest-point-fast/fr.unistra.icube-igg.dyndat/horse_maya/obj/" + fileName
 		ImportFile filePath #noPrompt
 	)
 	return 0

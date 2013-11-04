@@ -59,11 +59,12 @@ for t_i = 2 : tau
         L8 = response(from_id : to_id, :);
         
         
-        B = ((L - L1) < 0) + ((L - L2) < 0) + ((L - L3) < 0) + ...
-            + ((L - L4) < 0) + ((L - L5) < 0) + ((L - L6) < 0) + ...
-            + ((L - L7) < 0) + ((L - L8) < 0) + (L < eps);
+        B = ((L - L1) <= 0) + ((L - L2) <= 0) + ((L - L3) <= 0) + ...
+            + ((L - L4) <= 0) + ((L - L5) <= 0) + ((L - L6) <= 0) + ...
+            + ((L - L7) <= 0) + ((L - L8) <= 0) + (L <= eps);
         
         %% Extrema in space-time
+        % 1. Time
         L_next = circshift(L, [0 1]);
         L_next(:, 1) = zeros(1, n_v);
         L_prev = circshift(L, [0 -1]);
@@ -77,17 +78,16 @@ for t_i = 2 : tau
         %gpuL = L;
         %gpuArray(gpuL);
         %gpuArray(B);
-                
-        
+                 
+        % 2. Space
         for v_i = 1 : n_v
             adj = find(A(v_i, :) > 0);
+            adj = adj'; % to column vector          
+            
             for f_i = 1 : n_f
-                if (max(L(adj, f_i)) > L(v_i, f_i))
-                    B(v_i, f_i) = 1;
-                end % if
-            end % for
-        end % for
-        
+                B(v_i, f_i) = B(v_i, f_i) + (L(v_i, f_i) - max(L(adj, f_i)) <= 0);   
+            end % for            
+        end % for        
         
         %gather(B);
         

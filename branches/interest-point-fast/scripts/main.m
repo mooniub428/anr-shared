@@ -5,7 +5,7 @@ function [] = main()
 load_coretools();
 
 % Load configuration
-param = config('cylinder2');
+param = config('sphere_pulse');
 
 %% Surface deformation
 
@@ -32,6 +32,7 @@ pyramid = zeros((tau + 1) * (sigma + 1) * objseq.n_v, objseq.n_f);
 pyramid(1:objseq.n_v, :) = D_; % set base scale
 % Put it to GPU 
 %pyramid = gpuArray(pyramid);
+
 disp('Pyramid ::');
 pyramid = do_time_smoothing(pyramid, D_, tau); 
 pyramid = do_space_smoothing(pyramid, A, D_, sigma, tau); 
@@ -43,7 +44,8 @@ response = (-1) * ones((tau + 1) * (sigma + 1) * objseq.n_v, objseq.n_f);
 response = compute_response(pyramid, response, objseq.n_v, sigma, tau, param);
 
 %% Interest point extraction
-eps = 0.0001;
+% sum(reshape(response,176985*81,1)>1)
+eps = 1.0e-8;
 IP = detect_interest_point(response, A, objseq.n_v, objseq.n_f, sigma, tau, eps);
 % Bring back to cpu
 %response = gather(response);

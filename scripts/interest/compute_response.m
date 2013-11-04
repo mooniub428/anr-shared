@@ -21,8 +21,7 @@ for t_i = 1 : (tau-1)
         %elseif( (t_i == (tau-1)) || (s_i == (sigma-1)) )
         end % if
         
-        %{
-        else
+        if(param.DoG_new)
             from_id = s_i * tau * n_v + 1 + (t_i - 1) * n_v;
             to_id = s_i * tau * n_v + t_i * n_v;
             S12 = pyramid(from_id_ : to_id_, :);
@@ -31,8 +30,7 @@ for t_i = 1 : (tau-1)
             to_id = (s_i - 1) * tau * n_v + (t_i + 1) * n_v;
             S21 = pyramid(from_id : to_id, :);
             response(from_id_ : to_id_, :) = abs(S22 + S11 - S12 - S21);
-        end % if
-        %}
+        end % if        
     end % for
 end % for
 

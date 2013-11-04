@@ -24,7 +24,7 @@ param.data_folder = ['../../fr.unistra.icube-igg.dyndat/' data_name '/'];
 
 
 % Linear scale space representation)
-param.smooth_num = 4; % Total number of octaves: smooth_num x smooth_num (recommended to be < 50) 
+param.smooth_num = 8; % Total number of octaves: smooth_num x smooth_num (recommended to be < 50) 
 param.do_scale_norm = false;
 param.DoG_new = false;
 

@@ -1,4 +1,4 @@
-function [ pyramid ] = do_time_smoothing( pyramid, D_, tau )
+function [ pyramid ] = do_time_smoothing(pyramid, D_, tau)
 
 n_v = size(D_, 1);
 n_f = size(D_, 2);

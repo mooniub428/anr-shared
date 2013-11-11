@@ -47,7 +47,7 @@ IP = detect_interest_point(response, A, objseq.n_v, objseq.n_f, sigma, tau, eps,
 alg_elapsed_time = toc;
 
 %export_interest_point(objseq, param, IP, sigma, tau);
-save_interest_point(objseq, param, IP, response, sigma, tau);
+save_interest_point(objseq, param, IP, response, sigma, tau); % save a sequence of OBJ files representing interest points
 
 % Shut down Matlab workers
 matlabpool close;

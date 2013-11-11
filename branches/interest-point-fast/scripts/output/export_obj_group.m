@@ -1,8 +1,8 @@
-function [] = export_obj_group(fid, i, vertices, triangles)
+function [] = export_obj_group(fid, group_i, material, vertices, triangles)
 
 % Object header
 fprintf(fid, '#\n');
-fprintf(fid, ['# object ' int2str(i) '\n']);
+fprintf(fid, ['# object ' int2str(group_i) '\n']);
 fprintf(fid, '#\n');
 
 nV = size(vertices, 1);
@@ -19,10 +19,13 @@ end %for
 fprintf(fid, '\n');
 
 % Write group
-fprintf(fid, ['g ip_' int2str(i) '\n']);
+fprintf(fid, ['g ip_' int2str(group_i) '\n']);
 
-% Write material
-fprintf(fid, ['usemtl ip_' int2str(i) '\n']);
+% Write material if appropriate
+material_num = numel(material);
+if(group_i <= material_num)
+    fprintf(fid, ['usemtl ip_' int2str(group_i) '\n']);
+end % if
 
 % Write the Face list
 for iF = 1:nF

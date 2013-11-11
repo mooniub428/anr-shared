@@ -15,7 +15,8 @@ end % for
 
 % Export all frames
 for f_i = 1 : n_f
-    I = find(J == f_i);
+    % J is a vector of frame ids with interest points
+    I = find(J == f_i); 
     k = size(I, 1);
     
     for j = 1 : k
@@ -25,7 +26,6 @@ for f_i = 1 : n_f
         v = vertices .* S(i);
         v = v + repmat(T(i, :), n_v, 1);        
         V((j-1)*n_v + 1 : j * n_v, :) = v;
-        
     end % for
     
     k = k + 1;
@@ -35,7 +35,7 @@ for f_i = 1 : n_f
     end % for      
     
     %exportOBJ(fileName, V, TRI);
-    export_obj_mtl(export_dir, f_i, V, TRI, C, opacity, n_v, n_t);
+    export_obj_mtl(export_dir, f_i, V, TRI, I, C, opacity, n_v, n_t);
 end % for
 
 end % function

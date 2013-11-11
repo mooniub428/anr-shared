@@ -7,13 +7,12 @@ IP_count = sum(sum(IP));
 if(IP_count > 0)
     T = zeros(IP_count, 3); % Translation
     S = zeros(IP_count, 1); % Scale
-    C = zeros(IP_count, 3); % Color
-    TauScales = zeros(IP_count, 1);
+    C = zeros(IP_count, 3); % Color    
     
     color_range = produce_color([1 : tau]) / 255;
     
     % Get interest point coordinates 
-    [I, J] = find(IP == 1);
+    [I, J] = find(IP == 1); % J is a vector of frame ids with interest points
     n_v = size(V, 1);
     for i = 1 : IP_count
         v_i = mod(I(i), n_v) + (~mod(I(i), n_v))*n_v;        

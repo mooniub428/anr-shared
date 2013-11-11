@@ -33,7 +33,7 @@ bb_max_diag = max_diag_bbox(objseq.vertices)
 % end % for time
 
 % 2. Export at all scales 
-save_all_scales(export_dir, IP, IP_mesh, objseq.V, sigma, tau, bb_max_diag);
+save_all_scales(export_dir, IP, IP_mesh, objseq.V, sigma, tau, bb_max_diag); % each frame has features from all scales
 
 
 end % function

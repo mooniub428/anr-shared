@@ -1,7 +1,7 @@
 function [] = export_obj_mtl(export_dir, f_i, V, TRI, I, C, opacity, n_v, n_t)
 
 % Write material file
-mtlFileName = ['ip-mtllib-' int2str(f_i) '.mtl'];
+mtlFileName = ['ip-mtllib_' int2str(f_i) '.mtl'];
 mtlFilePath = [export_dir mtlFileName];
 [fid, msg] = fopen(mtlFilePath, 'wt');
 fprintf(fid, '# Material file\n');
@@ -23,7 +23,7 @@ end % for
 fclose(fid);
 
 % Export OBJ with separate IP objects and different materials
-objFileName = [export_dir 'ip-frame-' int2str(f_i) '.obj'];
+objFileName = [export_dir 'ip-frame_' int2str(f_i) '.obj'];
 export_obj(objFileName, mtlFileName, V, TRI, I, n_v, n_t);
 
 end % function

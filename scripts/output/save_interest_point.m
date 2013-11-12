@@ -1,4 +1,4 @@
-function [] = save_interest_point(objseq, param, IP, response, sigma, tau)
+function [] = save_interest_point(objseq, param, IP, sigma, tau)
 
 % Create export directory if it does not exist
 enforce_existence('../../fr.unistra.icube-igg.debug/');

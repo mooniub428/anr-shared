@@ -5,7 +5,7 @@ function [] = main()
 load_coretools();
 
 % Load configuration
-param = config('plane-2');
+param = config('cylinder');
 
 %% Surface deformation
 
@@ -37,11 +37,17 @@ pyramid = do_space_smoothing(pyramid, A, D_, sigma, tau);
 
 %% Feature response
 disp('Feature response ::');
-response = (-1) * ones((tau + 1) * (sigma + 1) * objseq.n_v, objseq.n_f);
-response = compute_response(pyramid, response, objseq.n_v, sigma, tau, param);
+if(param.diag_DoG)
+    response = response_diag_DoG(pyramid, objseq.n_v, objseq.n_f, sigma, tau, param);
+elseif(param.extended_DoG)
+    response = response_extended_DoG(pyramid, objseq.n_v, objseq.n_f, sigma, tau, param);
+else % param.space_DoG = true;
+    response = response_space_DoG(pyramid, objseq.n_v, objseq.n_f, sigma, tau, param);
+end % if
+
 
 %% Interest point extraction
-eps = 1.0e-1;
+eps = 1.0e-2;
 IP = detect_interest_point(response, A, objseq.n_v, objseq.n_f, sigma, tau, eps, param.step);
 
 alg_elapsed_time = toc;

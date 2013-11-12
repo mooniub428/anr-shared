@@ -34,5 +34,22 @@ for t_i = 1 : (tau-1)
     end % for
 end % for
 
+% Save color reflecting strain in reference scale
+disp('Saving color..');
+from_id = 1;
+to_id = n_v;
+S00 = pyramid(from_id : to_id, :);
+S00_vector = reshape(S00', numel(S00), 1); % Vectorized form of reference scale S00
+C = produce_color(S00_vector) / 255.0;
+
+% Create export directory if it does not exist
+enforce_existence('../../fr.unistra.icube-igg.debug/');
+export_dir = ['../../fr.unistra.icube-igg.debug/' param.data_name '/'];
+enforce_existence(export_dir);
+
+CFileName = [export_dir 'Colors.txt'];
+save(CFileName, 'C', '-ascii');
+
+
 end % function
 

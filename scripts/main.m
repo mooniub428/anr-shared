@@ -29,7 +29,7 @@ A = full(A); % get full matrix from a sparse matrix
 sigma = param.smooth_num;
 tau = param.smooth_num;
 pyramid = zeros((tau + 1) * (sigma + 1) * objseq.n_v, objseq.n_f);
-pyramid(1:objseq.n_v, :) = D_; % set base scale
+pyramid(1 : objseq.n_v, :) = D_; % set base scale
 
 disp('Pyramid ::');
 pyramid = do_time_smoothing(pyramid, D_, tau); 

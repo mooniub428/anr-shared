@@ -9,7 +9,10 @@ param.data_folder = ['../../fr.unistra.icube-igg.dyndat/' data_name '/'];
 
 param.smooth_num = 8; % Total number of octaves: smooth_num x smooth_num (recommended to be < 50) 
 param.step = 1; % Defines how many 1-ring smoothings spawn one octave
-param.DoG_new = false;
+
+param.diag_DoG = false;
+param.extended_DoG = true;
+param.space_DoG = false;
 
 % Minimal magnitude of principal strain taken into consideration
 param.strain_min = 0.01;

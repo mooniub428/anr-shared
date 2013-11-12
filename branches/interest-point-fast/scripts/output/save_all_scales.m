@@ -14,8 +14,10 @@ if(IP_count > 0)
     % Get interest point coordinates 
     [I, J] = find(IP == 1); % J is a vector of frame ids with interest points
     n_v = size(V, 1);
+    VIndex = zeros(numel(I), 1);
     for i = 1 : IP_count
         v_i = mod(I(i), n_v) + (~mod(I(i), n_v))*n_v;        
+        VIndex(i) = v_i;
         f_i = J(i);
         T(i, :) = V(v_i, :, f_i);
         
@@ -27,11 +29,12 @@ if(IP_count > 0)
         end % if
         s_i = (l - t_i) / tau + 1;
         
-        S(i) = 0.02 * s_i * bb_max_diag;
+        S(i) = 2.0e-2 * nthroot(s_i, 3) * bb_max_diag;
         C(i, :) = color_range(t_i, :);
-        
-        
+
     end % for
+    
+    export_IP_index(export_dir, VIndex, J);
     
     % Export interest points accroding to matrices T, S, C
     opacity = 0.3;

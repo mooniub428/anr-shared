@@ -14,7 +14,7 @@ IP_mesh.vertices = vertices;
 IP_mesh.triangles = triangles;
 
 % Max diagonal of the bounding box
-bb_max_diag = max_diag_bbox(objseq.vertices)
+bb_max_diag = max_diag_bbox(objseq.vertices);
 
 % 1. Export IP at each scale separately
 % for t_i = 1 : tau

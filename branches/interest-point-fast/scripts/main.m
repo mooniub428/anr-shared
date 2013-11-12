@@ -60,5 +60,7 @@ matlabpool close;
 
 alg_elapsed_time
 
+numOfIP = sum(sum(IP))
+
 end % function
 

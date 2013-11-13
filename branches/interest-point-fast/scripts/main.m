@@ -5,7 +5,7 @@ function [] = main()
 load_coretools();
 
 % Load configuration
-param = config('cylinder');
+param = config('camel');
 
 %% Surface deformation
 
@@ -47,13 +47,13 @@ end % if
 
 
 %% Interest point extraction
-eps = 1.0e-2;
+eps = 0.5;
 IP = detect_interest_point(response, A, objseq.n_v, objseq.n_f, sigma, tau, eps, param.step);
 
 alg_elapsed_time = toc;
 
 %export_interest_point(objseq, param, IP, sigma, tau);
-save_interest_point(objseq, param, IP, sigma, tau); % save a sequence of OBJ files representing interest points
+save_interest_point(objseq, param, response, IP, sigma, tau); % save a sequence of OBJ files representing interest points
 
 % Shut down Matlab workers
 matlabpool close;

@@ -13,6 +13,8 @@ for i = 1 : max_IP_num
     TRI((i-1)*n_t + 1 : i*n_t, :) = triangles + repmat((i-1)*n_v, n_t, 3);
 end % for
 
+InterestPointColour = 0;
+
 % Export all frames
 for f_i = 1 : n_f
     % J is a vector of frame ids with interest points
@@ -36,7 +38,25 @@ for f_i = 1 : n_f
     
     %exportOBJ(fileName, V, TRI);
     export_obj_mtl(export_dir, f_i, V, TRI, I, C, opacity, n_v, n_t);
+    
+    c_n = size(C, 1);
+    InterestPointColourFrame = zeros(c_n * n_v, 3);
+    % Export colour of interest point spheres
+    for c_i = 1 : c_n
+        start_id = n_v * (c_i - 1) + 1;
+        end_id = n_v * (c_i) ;
+        InterestPointColourFrame(start_id : end_id , :) = repmat(C(c_i, :), n_v, 1);
+    end % for     
+    
+    if(InterestPointColour == 0)
+        InterestPointColour = InterestPointColourFrame;
+    else
+        InterestPointColour = [InterestPointColour; InterestPointColourFrame];
+    end % if
+    
 end % for
+
+save([export_dir 'InterestPointColour.txt'], 'InterestPointColour', '-ascii');
 
 end % function
 

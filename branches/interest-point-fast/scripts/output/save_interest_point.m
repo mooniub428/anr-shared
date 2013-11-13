@@ -1,4 +1,4 @@
-function [] = save_interest_point(objseq, param, IP, sigma, tau)
+function [] = save_interest_point(objseq, param, response, IP, sigma, tau)
 
 % Create export directory if it does not exist
 enforce_existence('../../fr.unistra.icube-igg.debug/');
@@ -33,7 +33,7 @@ bb_max_diag = max_diag_bbox(objseq.vertices);
 % end % for time
 
 % 2. Export at all scales 
-save_all_scales(export_dir, IP, IP_mesh, objseq.V, sigma, tau, bb_max_diag); % each frame has features from all scales
+save_all_scales(export_dir, response, IP, IP_mesh, objseq.V, sigma, tau, bb_max_diag); % each frame has features from all scales
 
 
 end % function

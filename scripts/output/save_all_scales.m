@@ -1,4 +1,4 @@
-function [] = save_all_scales(export_dir, IP, IP_mesh, V, sigma, tau, bb_max_diag)
+function [] = save_all_scales(export_dir, response, IP, IP_mesh, V, sigma, tau, bb_max_diag)
 
 % Count the number of interest points
 IP_count = sum(sum(IP));
@@ -34,7 +34,7 @@ if(IP_count > 0)
 
     end % for
     
-    export_IP_index(export_dir, VIndex, J);
+    export_IP_index(export_dir, VIndex, J, response, IP);
     
     % Export interest points accroding to matrices T, S, C
     opacity = 0.3;

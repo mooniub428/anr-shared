@@ -5,7 +5,7 @@ function [] = main()
 load_coretools();
 
 % Load configuration
-param = config('camel');
+param = config('horse-8');
 
 %% Surface deformation
 
@@ -26,8 +26,13 @@ A = triangulation2adjacency(objseq, param, D_);
 A = full(A); % get full matrix from a sparse matrix 
 
 %% Pyramid
-sigma = param.smooth_num;
-tau = param.smooth_num;
+sigma = param.smooth_num_space;
+tau = param.smooth_num_time;
+
+% Adapt cut off frequency
+tau = floor(compute_filter_number(8, 8.0, 48.0));
+mean_edge = mean_edge_anim(objseq.V, A);
+
 pyramid = zeros((tau + 1) * (sigma + 1) * objseq.n_v, objseq.n_f);
 pyramid(1 : objseq.n_v, :) = D_; % set base scale
 

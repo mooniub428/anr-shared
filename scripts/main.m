@@ -5,7 +5,7 @@ function [] = main()
 load_coretools();
 
 % Load configuration
-param = config('horse-8');
+param = config('cylinder-8');
 
 %% Surface deformation
 
@@ -31,7 +31,8 @@ tau = param.smooth_num_time;
 
 % Adapt cut off frequency
 tau = floor(compute_filter_number(8, 8.0, 48.0));
-mean_edge = mean_edge_anim(objseq.V, A);
+%sigma = floor(compute_filter_number(8, 0.0, 0.0));
+%mean_edge = mean_edge_anim(objseq.V, A);
 
 pyramid = zeros((tau + 1) * (sigma + 1) * objseq.n_v, objseq.n_f);
 pyramid(1 : objseq.n_v, :) = D_; % set base scale
@@ -52,7 +53,7 @@ end % if
 
 
 %% Interest point extraction
-eps = 0.5;
+eps = 0.1;
 IP = detect_interest_point(response, A, objseq.n_v, objseq.n_f, sigma, tau, eps, param.step);
 
 alg_elapsed_time = toc;

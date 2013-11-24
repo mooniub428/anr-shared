@@ -5,11 +5,11 @@ function [] = main()
 load_coretools();
 
 % Load configuration
-param = config('cylinder-8');
+param = config('horse-48');
 
 %% Surface deformation
 
-matlabpool open 8;
+matlabpool open 6;
 
 % Transform obj sequence into matlab readable format and load it (conditional)
 objseq = objseq2mat(param);

@@ -5,7 +5,7 @@ function [] = main()
 load_coretools();
 
 % Load configuration
-param = config('horse-48');
+param = config('cylinder');
 
 %% Surface deformation
 
@@ -30,7 +30,7 @@ sigma = param.smooth_num_space;
 tau = param.smooth_num_time;
 
 % Adapt cut off frequency
-tau = floor(compute_filter_number(8, 8.0, 48.0));
+%tau = floor(compute_filter_number(8, 8.0, 48.0));
 %sigma = floor(compute_filter_number(8, 0.0, 0.0));
 %mean_edge = mean_edge_anim(objseq.V, A);
 
@@ -38,7 +38,7 @@ pyramid = zeros((tau + 1) * (sigma + 1) * objseq.n_v, objseq.n_f);
 pyramid(1 : objseq.n_v, :) = D_; % set base scale
 
 disp('Pyramid ::');
-pyramid = do_time_smoothing(pyramid, D_, tau); 
+pyramid = do_time_smoothing(pyramid, D_, tau, param.wt); 
 pyramid = do_space_smoothing(pyramid, A, D_, sigma, tau); 
 
 %% Feature response

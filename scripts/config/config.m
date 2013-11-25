@@ -12,7 +12,7 @@ param.smooth_num_space = 8;
 param.smooth_num_time = 6;
 param.step = 1; % Defines how many 1-ring smoothings spawn one octave
 param.wt = 3; % time windows size
-param.ws = 2; % space window size (ring unit)
+param.ws = 1; % space window size (ring unit)
 
 param.diag_DoG = false;
 param.extended_DoG = true;

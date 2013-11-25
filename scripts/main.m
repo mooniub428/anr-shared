@@ -5,7 +5,7 @@ function [] = main()
 load_coretools();
 
 % Load configuration
-param = config('cylinder');
+param = config('triangle');
 
 %% Surface deformation
 
@@ -39,7 +39,7 @@ pyramid(1 : objseq.n_v, :) = D_; % set base scale
 
 disp('Pyramid ::');
 pyramid = do_time_smoothing(pyramid, D_, tau, param.wt); 
-pyramid = do_space_smoothing(pyramid, A, D_, sigma, tau); 
+pyramid = do_space_smoothing(pyramid, A, D_, sigma, tau, param.ws); 
 
 %% Feature response
 disp('Feature response ::');

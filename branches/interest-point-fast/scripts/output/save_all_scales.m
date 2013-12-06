@@ -15,6 +15,10 @@ if(IP_count > 0)
     [I, J] = find(IP == 1); % J is a vector of frame ids with interest points
     n_v = size(V, 1);
     VIndex = zeros(numel(I), 1);
+    
+    % Matrix containing space-time characteristic scales
+    ST = zeros(IP_count, 2);
+    
     for i = 1 : IP_count
         v_i = mod(I(i), n_v) + (~mod(I(i), n_v))*n_v;        
         VIndex(i) = v_i;
@@ -29,12 +33,16 @@ if(IP_count > 0)
         end % if
         s_i = (l - t_i) / tau + 1;
         
+        % Populate characteristic scale matrix
+        ST(i, 1) = s_i;
+        ST(i, 2) = t_i;
+        
         S(i) = 2.0e-2 * nthroot(s_i, 3) * bb_max_diag;
         C(i, :) = color_range(t_i, :);
 
     end % for
     
-    export_IP_index(export_dir, VIndex, J, response, IP);
+    export_IP_index(export_dir, VIndex, J, response, IP, ST);
     
     % Export interest points accroding to matrices T, S, C
     opacity = 0.3;

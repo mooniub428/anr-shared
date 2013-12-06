@@ -8,10 +8,11 @@ param.data_name = data_name;
 param.data_folder = ['../../fr.unistra.icube-igg.dyndat/' data_name '/']; 
 
 %param.smooth_num = 12; % Total number of octaves: smooth_num x smooth_num (recommended to be < 50) 
-param.smooth_num_space = 8;
-param.smooth_num_time = 6;
+param.region_deformation = false;
+param.smooth_num_space = 10;
+param.smooth_num_time = 8;
 param.step = 1; % Defines how many 1-ring smoothings spawn one octave
-param.wt = 3; % time windows size
+param.wt = 5; % time windows size
 param.ws = 1; % space window size (ring unit)
 
 param.diag_DoG = false;

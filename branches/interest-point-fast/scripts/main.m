@@ -5,21 +5,26 @@ function [] = main()
 load_coretools();
 
 % Load configuration
-param = config('triangle');
+param = config('horse');
 
 %% Surface deformation
 
-matlabpool open 6;
+matlabpool open 7;
 
 % Transform obj sequence into matlab readable format and load it (conditional)
 objseq = objseq2mat(param);
 
 % Compute surface deformation
 tic;
-[D] = recompute_strain(objseq.V, objseq.triangles, objseq.n_f, objseq.n_t);
-
-% Switch from triangle to vertex strain formulation
-D_ = tri2vert_strain(D, objseq.triangles, objseq.n_v, objseq.n_f); 
+if(param.region_deformation)
+    rgnRad = mean(mean(objseq.Gd)) * 0.02;
+    [D] = VertRegionDeformation(objseq.V, objseq.triangles, rgnRad, objseq.Gd);
+    D_ = D;
+else
+    [D] = recompute_strain(objseq.V, objseq.triangles, objseq.n_f, objseq.n_t);
+    % Switch from triangle to vertex strain formulation
+    D_ = tri2vert_strain(D, objseq.triangles, objseq.n_v, objseq.n_f); 
+end % if
 
 %% Adjacency
 A = triangulation2adjacency(objseq, param, D_);

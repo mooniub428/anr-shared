@@ -5,7 +5,7 @@ function [] = main()
 load_coretools();
 
 % Load configuration
-param = config('horse');
+param = config('cylinder');
 
 %% Surface deformation
 

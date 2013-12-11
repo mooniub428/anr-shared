@@ -5,7 +5,7 @@
 function param = config(data_name)
 
 param.data_name = data_name;
-param.data_folder = ['../../fr.unistra.icube-igg.dyndat/' data_name '/']; 
+param.data_folder = ['../../dyndat/' data_name '/']; 
 
 %param.smooth_num = 12; % Total number of octaves: smooth_num x smooth_num (recommended to be < 50) 
 param.region_deformation = false;

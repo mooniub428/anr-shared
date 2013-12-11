@@ -1,9 +1,9 @@
 function [ ] = load_coretools( )
 
-addpath('../../fr.unistra.icube-igg.tools/obj');
-addpath('../../fr.unistra.icube-igg.tools/export');
-addpath('../../fr.unistra.icube-igg.tools/objseq');
-addpath('../../fr.unistra.icube-igg.tools/color');
+addpath('../../tools/obj');
+addpath('../../tools/export');
+addpath('../../tools/objseq');
+addpath('../../tools/color');
 
 addpath('config');
 addpath('deformation');

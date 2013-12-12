@@ -27,8 +27,8 @@ S00_vector = reshape(S00', numel(S00), 1); % Vectorized form of reference scale 
 C = produce_color(S00_vector) / 255.0;
 
 % Create export directory if it does not exist
-enforce_existence('../../debug/');
-export_dir = ['../../debug/' param.data_name '/'];
+enforce_existence('../debug/');
+export_dir = ['../debug/' param.data_name '/'];
 enforce_existence(export_dir);
 
 CFileName = [export_dir 'Colors.txt'];

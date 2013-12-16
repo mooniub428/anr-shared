@@ -2,7 +2,7 @@
 % derivatives [Zaharescu et al., Surface Feature Detection and Description
 % with Application to Mesh Matching]
 %
-function [g] = Grad(F, U, W)
+function [g] = DiscreteGradient(F, U, W)
 
 Dd = DirectDerivative(F, U);
 

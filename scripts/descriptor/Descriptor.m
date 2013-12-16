@@ -26,7 +26,7 @@ Gflat_prime = ChangeBasis(E, E_prime, Gflat);
 % Stack frames
 %Vol
 
-% Histogram of gradient orientations
+% Histogram of gradient orientations within volume Vol
 %H
 
 end % function

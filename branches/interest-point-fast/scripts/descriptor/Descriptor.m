@@ -14,14 +14,14 @@ F = rand(size(G, 1), 1);
 Gflat = pca(G, 2); % Projected data points reside in the XY plane
 
 % Original basis XYZ i.e. flattened
-E = eye(3);
+E_orig = eye(3);
 
 % New basis obtained by rotating original basis to align with dominant
 % orientation
-[E_prime] = DominantOrientBasis(F);
+[E_prime] = DominantOrientBasis(E_orig, Gflat, F);
 
 % Changes basis from original to the new dominant oriented 
-Gflat_prime = ChangeBasis(E, E_prime, Gflat);
+Gflat_prime = ChangeBasis(E_orig, E_prime, Gflat);
 
 % Stack frames
 %Vol

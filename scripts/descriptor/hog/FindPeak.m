@@ -1,7 +1,8 @@
-function [ output_args ] = FindPeak( input_args )
-%FINDPEAK Summary of this function goes here
-%   Detailed explanation goes here
+% Estimate the peak of the histogram / the dominant gradients direction 
+%
+function [phi] = FindPeak(H)
 
+phi = [0 0 0]';
 
-end
+end % function
 

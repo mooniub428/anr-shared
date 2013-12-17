@@ -11,16 +11,18 @@ H = zeros(num_bins, hist_dim);
 for x_i = 1 : n
     % angle index (phi) or (phi, theta)
     for a_i = 1 : hist_dim
-        x = X(x_i, :);
+        x = X(x_i, 1 : 3);
         g = Gr(x_i, :);
         
-        bin_id = GetBinId(g, num_bins);
-        
-        dist_x = norm(p - x);
-        sig = 1;
-        weight = gaussmf(dist_x, [sig 0]);
-        
-        H(bin_id, a_i) = H(bin_id, a_i) + norm(g) * weight;
+        if(norm(g) > 0)
+            bin_id = GetBinId(g, num_bins);
+            
+            dist_x = norm(x - p);
+            sig = 100;
+            weight = gaussmf(dist_x, [sig 0]);
+            
+            H(bin_id, a_i) = H(bin_id, a_i) + norm(g) * weight;
+        end % if
     end % for
 end % for
 

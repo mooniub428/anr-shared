@@ -8,7 +8,10 @@ p = [0 0 0];
 % Surface patch around p of characteristic scale
 [X, A] = planePatch;
 % Scalar field over the patch
-F = rand(size(X, 1), 1);
+F = rand(size(X, 1), 1) * 10;
+%F = ones(size(X,1), 1);
+%F(7) = 70;
+%F(8) = 100;
 
 % Flatten the patch
 X_flat = pca(X, 2); 
@@ -18,10 +21,10 @@ X_flat(:, 4) = [1 : size(X_flat, 1)]';
 Patch = X_flat;
 PatchWithBorder = X_flat;
 % Estimate the dominant orientation of gradient vectors within patch
-[e_prime] = DominantOrientation(p, Patch, PatchWithBorder, F, A);
+[e_prime] = DominantOrientation(p, Patch, PatchWithBorder, F, A)
 
 % Rotate coordinate frame to follow dominant orientation
-X_flat_prime = ChangeBasis(X_flat, e_prime)
+X_flat_prime = ChangeBasis(X_flat, e_prime);
 
 % Stack frames
 %Vol

@@ -1,23 +1,27 @@
-% Discrete gradient approximation using several discrete directional 
-% derivatives [Zaharescu et al., Surface Feature Detection and Description
+% Discrete gradient approximation Xsing several discrete directional 
+% derivatives [ZaharescX et al., SXrface FeatXre Detection and Description
 % with Application to Mesh Matching]
 %
-function [g] = DiscreteGradient(F, U, W)
+% F - scalar field valXes
+% X - coordinates of data points
+% W - conditional weights of discrete derivatives 
+%
+function [g] = DiscreteGradient(F, X, W)
 
-Dd = DirectDerivative(F, U);
+Dd = DirectDerivative(F, X);
 
-x = U(1, :);
-n = size(U, 1) - 1;
+x = X(1, :);
+n = size(X, 1);
 
 g = [0.0 0.0 0.0];
-if(W == 0) W = ones(n + 1); end % if
+if(W == 0) 
+    W = ones(n, 1); 
+end % if
 
-for i = 1 : n
-    y = U(i, :);
-    g = g + W(i + 1) * Dd(i) * (y - x);
+for i = 2 : n
+    y = X(i, :);
+    g = g + W(i) * Dd(i-1) * (y - x);
 end % for
-
-g = g';
 
 end % function
 

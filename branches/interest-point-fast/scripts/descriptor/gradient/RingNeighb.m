@@ -11,7 +11,7 @@ Rn = zeros(n, 3);
 Fn = zeros(n, 1);
 
 for i = 1 : n
-    nextId = Nb(i)
+    nextId = Nb(i);
     nextPoint = PatchWithBorder(find(Id == nextId), 1 : 3);
     Rn(i, :) = nextPoint;
     Fn(i) = F(find(Id == nextId));

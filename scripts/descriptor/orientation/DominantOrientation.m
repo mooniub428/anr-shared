@@ -1,20 +1,19 @@
 % Compute a new basis which is aligned as the dominant gradient direction
 %
-function [E_prime] = DominantOrientation(E_orig, V, F)
+function [e_prime] = DominantOrientation(p, Patch, PatchWithBorder, F, A)
 
 % Initialize the basis with zeros
-E_prime = zeros(3);
+e_prime = zeros(3, 1);
 
 % Compute gradients
-Gr = DiscreteGradient(F, V, 0);
+G = GradientSet(p, F, Patch, PatchWithBorder, A);
 
 % Compute histogram
-H = HistogramOfGradient(V, Gr);
+H = HistogramOfGradient(p, Patch, G);
 
 % Estimate the peak of the histogram i.e. the dominant gradients direction 
-phi_dominant = FindPeak(H);
+% [phi_dominant, ~] = FindPeak(H);
 
-% Rotate
 
 end % function
 

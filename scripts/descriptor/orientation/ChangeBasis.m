@@ -7,8 +7,12 @@ angle = RotAngle(e_prime);
 % Get rotation matrix
 R = RotMatrixZ(angle);
 
+X_ = X(:, 1 : 3);
 % Transform coordinates
-X_prime = R * X;
+X_prime = R * X_';
+
+X_prime = X_prime';
+X_prime(:, 4) = X(:, 4);
 
 end % function
 

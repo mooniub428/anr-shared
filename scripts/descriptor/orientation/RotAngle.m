@@ -13,8 +13,9 @@ elseif(x < 0 && y <= 0) % III Quarter
     angle = pi + angle;
 elseif(x > 0 && y <= 0) % IV Quarter
     angle = atan(y / x);
-elseif(x == 0) % Singularity/Zero angle
-    angle = 0.0;
+elseif( (x == 0) && (y < 0) ) % Singularity
+    angle = 3 * pi / 2;
+elseif( (x == 0) && (y > 0) )
 end % if
 
 end % function

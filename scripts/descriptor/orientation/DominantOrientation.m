@@ -2,17 +2,14 @@
 %
 function [e_prime] = DominantOrientation(p, Patch, PatchWithBorder, F, A)
 
-% Initialize the basis with zeros
-e_prime = zeros(3, 1);
-
-% Compute gradients
+% Compute gradients for each point within the patch
 G = GradientSet(p, F, Patch, PatchWithBorder, A);
 
 % Compute histogram
 H = HistogramOfGradient(p, Patch, G);
 
 % Estimate the peak of the histogram i.e. the dominant gradients direction 
-% [phi_dominant, ~] = FindPeak(H);
+[e_prime] = FindPeak(H);
 
 
 end % function

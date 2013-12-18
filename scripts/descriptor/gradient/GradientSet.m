@@ -1,4 +1,4 @@
-function [G] = GradientSet(p, F, Patch, PatchWithBorder, A)
+function [G] = GradientSet(F, Patch, PatchWithBorder, A)
 
 n = size(Patch, 1);
 G = zeros(n, 3);

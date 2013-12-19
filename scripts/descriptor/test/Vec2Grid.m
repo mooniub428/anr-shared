@@ -1,7 +1,15 @@
-function [ output_args ] = Vec2Grid( input_args )
-%VEC2GRID Summary of this function goes here
-%   Detailed explanation goes here
+function [px, py] = Vec2Grid(P)
 
+n = sqrt(size(P, 1));
 
-end
+px = zeros(n);
+py = zeros(n);
+
+X = P(:, 1);
+Y = P(:, 2);
+
+px = reshape(X, n, n);
+py = reshape(Y, n, n);
+
+end % function
 

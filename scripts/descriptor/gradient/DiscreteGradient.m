@@ -20,7 +20,7 @@ end % if
 
 for i = 2 : n
     y = X(i, :);
-    g = g + W(i) * Dd(i-1) * (y - x);
+    g = g + W(i) * Dd(i-1) * (y - x) / norm(y - x);    
 end % for
 
 end % function

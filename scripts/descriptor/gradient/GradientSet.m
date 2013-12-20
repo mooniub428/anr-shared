@@ -10,9 +10,11 @@ function [G] = GradientSet(F, Patch, PatchWithBorder, A)
 n = size(Patch, 1);
 G = zeros(n, 3);
 
+Pid = Patch(:, 4);
 for i = 1 : n    
-    [Rn, Fn] = RingNeighb(i, PatchWithBorder, F, A);
-    G(i, :) = DiscreteGradient([F(i); Fn], [PatchWithBorder(i, 1:3); Rn], 0);
+    pid = Pid(i);
+    [Rn, Fn] = RingNeighb(pid, PatchWithBorder, F, A);
+    G(i, :) = DiscreteGradient([F(pid); Fn], [Patch(i,1:3); Rn], 0);
 end % for
 
 end % function

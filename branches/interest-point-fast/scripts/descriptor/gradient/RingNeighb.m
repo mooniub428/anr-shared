@@ -1,4 +1,4 @@
-% Get first ring neighbours of point p, adjacency matrix A, given a surface
+% Get first ring neighbours of point p, given adjacency matrix A and a surface
 % patch
 %
 function [Rn, Fn] = RingNeighb(pid, PatchWithBorder, F, A)

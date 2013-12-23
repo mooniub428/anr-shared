@@ -9,7 +9,8 @@ V = zeros(n ^ 2, 3);
 % Populate V
 for i = 1 : n
     for j = 1 : n
-        V((i - 1) * n + j, :) = [X(i, j) Y(i, j) Z(i, j)];
+        V((i - 1) * n + j, :) = [X(j, i) Y(j, i) Z(j, i)];
+        %V((i - 1) * n + j, :) = [X(i, j) Y(i, j) Z(i, j)];
     end % for
 end % for
 

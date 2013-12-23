@@ -8,8 +8,9 @@ py = zeros(n);
 X = P(:, 1);
 Y = P(:, 2);
 
-px = reshape(X, n, n);
-py = reshape(Y, n, n);
+py = reshape(X, n, n);
+px = reshape(Y, n, n);
+px = px';
 
 end % function
 

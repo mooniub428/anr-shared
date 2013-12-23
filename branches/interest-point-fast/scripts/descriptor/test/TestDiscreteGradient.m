@@ -3,6 +3,8 @@ function [] = TestDiscreteGradient()
 % Get grid data points, with scalar field
 [Patch, Patch_prime, F, F_prime, Fv, Fv_prime, v, h] = GridData(); % prime referes to "border"
 
+[Patch, Patch_prime, F, F_prime, Fv, Fv_prime, v, h] = GridData(); 
+
 % Compute "ground-truth" gradient
 [px, py] = gradient(F);
 

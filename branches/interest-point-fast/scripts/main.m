@@ -9,7 +9,7 @@ param = config('cone');
 
 %% Surface deformation
 
-matlabpool open 7;
+matlabpool open 2;
 
 % Transform obj sequence into matlab readable format and load it (conditional)
 objseq = objseq2mat(param);
@@ -58,7 +58,7 @@ end % if
 
 
 %% Interest point extraction
-eps = 0.1;
+eps = 0.1; % threshold 
 IP = detect_interest_point(response, A, objseq.n_v, objseq.n_f, sigma, tau, eps, param.step);
 
 alg_elapsed_time = toc;

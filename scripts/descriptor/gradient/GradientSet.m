@@ -5,16 +5,17 @@
 % adjacency matrix A)
 % 4th column of Patch/PatchWithBorder contains indices of vertices included
 % 
-function [G] = GradientSet(F, Patch, PatchWithBorder, A)
+function [G] = GradientSet(DeformScalar, SurfPatchFlat, V, Adj)
 
-n = size(Patch, 1);
-G = zeros(n, 3);
+numVert = size(SurfPatchFlat.XYZ, 1);
+% Init gradient set
+G = zeros(numVert, 3);
 
-Pid = Patch(:, 4);
-for i = 1 : n    
+Pid = SurfPatchFlat.ID;
+for i = 1 : numVert   
     pid = Pid(i);
-    [Rn, Fn] = RingNeighb(pid, PatchWithBorder, F, A);
-    G(i, :) = DiscreteGradient([F(pid); Fn], [Patch(i,1:3); Rn], 0);
+    [Rn, Fn] = RingNeighb(pid, V, DeformScalar, Adj);
+    G(i, :) = DiscreteGradient([DeformScalar(pid); Fn], [SurfPatchFlat.XYZ(i,:); Rn], 0);
 end % for
 
 end % function

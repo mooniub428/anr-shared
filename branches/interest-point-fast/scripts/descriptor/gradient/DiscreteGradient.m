@@ -20,7 +20,12 @@ end % if
 
 for i = 2 : n
     y = X(i, :);
-    g = g + W(i) * Dd(i-1) * (y - x) / norm(y - x);    
+    if(norm(y - x) > 0)
+        unitVector = (y - x) / norm(y - x);
+    else 
+        unitVector = 0;
+    end % if
+    g = g + W(i) * Dd(i-1) * unitVector;    
 end % for
 
 end % function

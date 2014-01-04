@@ -3,7 +3,8 @@
 load_coretools();
 
 % Load configuration
-param = config('descriptor_test');
+param = config('descriptor_test2');
+%param = config('triangle');
 
 %% Surface deformation
 % Transform obj sequence into matlab readable format and load it (conditional)
@@ -22,6 +23,6 @@ A = full(A); % get full matrix from a sparse matrix
 sigma = param.smooth_num_space;
 tau = param.smooth_num_time;
 
-H1 = Descriptor(objseq.vertices, objseq, D_, A, 105, 2, sigma, tau);
-H2 = Descriptor(objseq.vertices, objseq, D_, A, 20, 2, sigma, tau);
-H1-H2
+DescriptorFine(objseq.vertices, objseq, D_, A, 1, 2, sigma, tau);
+%H2 = Descriptor(objseq.vertices, objseq, D_, A, 20, 2, sigma, tau);
+%H1-H2

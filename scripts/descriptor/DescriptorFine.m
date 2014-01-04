@@ -23,7 +23,8 @@ function [Histograms] = DescriptorFine(Vertices, VerticesOverFrames, DeformScala
         
     [GradientsFull, Volume] = GetFullVolumeGradients(SurfPatchFlat, DeformScalar, Frames, spaceStep, timeStep);
             
-    Histograms = GetHistograms(GradientsFull, Volume, numOfBins);           
+    Histograms = GetHistograms(GradientsFull, Volume, numOfBins);  
+    Histograms = InterpolateAllHistograms(Histograms);
 end % function
 
 % Unfinished

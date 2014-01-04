@@ -28,7 +28,7 @@ end % if
 
 %% Adjacency
 A = triangulation2adjacency(objseq, param, D_);
-A = full(A); % get full matrix from a sparse matrix 
+%A = full(A); % get full matrix from a sparse matrix 
 
 %% Pyramid
 sigma = param.smooth_num_space;
@@ -56,9 +56,10 @@ else % param.space_DoG = true;
     response = response_space_DoG(pyramid, objseq.n_v, objseq.n_f, sigma, tau, param);
 end % if
 
-
+%  save('Camel.mat',  'A', 'eps', 'objseq', 'param', 'response', 'sigma', 'tau', '-v7.3')
+clear 'pyramid' 'D' 'D_';
 %% Interest point extraction
-eps = 0.05; % threshold 
+eps = 0.9; % threshold 
 IP = detect_interest_point(response, A, objseq.n_v, objseq.n_f, sigma, tau, eps, param.step);
 
 alg_elapsed_time = toc;

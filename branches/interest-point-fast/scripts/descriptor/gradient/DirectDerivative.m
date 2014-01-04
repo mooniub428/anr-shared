@@ -3,6 +3,7 @@
 %
 function [Dd] = DirectDerivative(F, U)
 
+% First point is where we estimate derivative
 x = U(1, :);
 Fx = F(1);
 

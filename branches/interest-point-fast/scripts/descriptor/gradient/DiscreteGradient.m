@@ -8,8 +8,10 @@
 %
 function [g] = DiscreteGradient(F, X, W)
 
+% Compute directional derivatives
 Dd = DirectDerivative(F, X);
 
+% First point is where we estimate the gradient
 x = X(1, :);
 n = size(X, 1);
 
@@ -18,6 +20,8 @@ if(W == 0)
     W = ones(n, 1); 
 end % if
 
+% Approximate discrete gradient as weighted summation of directional
+% derivatives
 for i = 2 : n
     y = X(i, :);
     if(norm(y - x) > 0)

@@ -19,7 +19,7 @@ if (param.region_deformation)
     objseq.Gd = Gd;
 end % if
 
-parfor i = 4 : num_files
+for i = 4 : num_files
     next_file = [param.data_folder 'obj/' listing(i).name];
     [vertices, ~] = read_wobj(next_file);
     V(:,:, i-2) = vertices;

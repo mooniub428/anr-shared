@@ -11,7 +11,7 @@ function [Histograms] = DescriptorFine(Vertices, VerticesOverFrames, DeformScala
     timeStep = 0.2;
     
     % Get coordinates of the interest point    
-    SurfPatchFlat = TranslateRotateScale(SurfPatchFlat, [1 0 0]);
+    [SurfPatchFlat] = TranslateRotateScale(SurfPatchFlat, [1 0 0]);
     DenseSurfPatchFlat = interpolate2(SurfPatchFlat, DeformScalar(:, fi), spaceStep);
     
     % Get dominant orientation with respect to gradients of surfaces
@@ -30,15 +30,18 @@ end % function
 % Unfinished
 function [SurfPatch, Frames] = GetSurfacePatch(Vertices, Adj, vi, sigma, tau)
     numVertices = size(Vertices, 1);
-    ID = find(Adj(:, vi));
+       
+    %ID = find(Adj(:, vi));
+    ID = GetNRing(Adj, vi, 2)
+    
     XYZ = Vertices(ID, :);
         
     XYZ = [Vertices(vi, :); XYZ];
     SurfPatch.XYZ = XYZ;
-    ID = find(Adj(vi, :));
-    SurfPatch.ID = [vi ID];
     
-    Frames = [1 2 3];
+    SurfPatch.ID = [vi ID'];
+    
+    Frames = [1 2 3 4];
 end % function
 
 %%
@@ -52,6 +55,15 @@ function [DenseSurfPatchFlat] = interpolate2(SurfPatchFlat, DeformScalar, spaceS
     DensePoints = DensePoints';
     
     DenseDeformScalar = griddata(SparsePoints(1,:), SparsePoints(2,:), DeformScalar, DensePoints(1,:), DensePoints(2,:), 'nearest')';
+    
+    % Kriging
+%     pos_known = SparsePoints';
+%     val_known = DeformScalar'; % adding some uncertainty
+%     V='1 Sph(.2)';      % Select variogram model
+%     V = '1 Lin(1)';
+%     pos_est = DensePoints';
+%     [d_est,d_var]=krig(pos_known,val_known,pos_est,V)
+
     
 %      RBFFunction = GetRBFunction();
 %      rbf_x = rbfcreate(SparsePoints, DeformScalar,'RBFFunction', RBFFunction, 'Stats', 'on');

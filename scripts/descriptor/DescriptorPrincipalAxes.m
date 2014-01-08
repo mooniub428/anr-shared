@@ -1,50 +1,70 @@
 % Compute 2d radial histogram descriptor based on curface deformation
 % principal axes
-function [] = DescriptorPrincipalAxes(Vertices, Triangles, VerticesOverFrames, E, Adj, vi, fi, sigma, tau)
+function [] = DescriptorPrincipalAxes(Vertices, Triangles, E, Adj, vi, fi, sigma, tau)
     % Get local triangle patch around the interest point
     [LocalPatch, Frames] = GetTriPatch(Vertices, Triangles, Adj, vi, sigma, tau);
     
-    % Get principal deformation axes for triangles TriPatch.ID
-    %riPatch.E = 
+    % Flatten vertices within the patch
     XY = pca(LocalPatch.XYZ, 2);
-    LocalPatch.XYZ = [XY zeros(size(XY, 1), 1)]; 
-    LocalPatch.ID =  SurfPatch.ID;
+    LocalPatchFlat = LocalPatch;
+    LocalPatchFlat.XYZ = [XY zeros(size(XY, 1), 1)];     
     
-
-
+    % Compute principal directions with respect to their barycentric
+    % coordinates
+	% LocalPatchFlat.PrincipalAxes
+    LocalPatchFlat = GetPrincipalAxesFromBarycentric(LocalPatchFlat, Triangles, E, fi);
+    %interpolate2(PrincipalAxes);
 end % function
 
-function [LocalPatch, Frames] = GetTriPatch(Vertices, Triangles, AdjMatrix, vi, sigma, tau)              
+function [LocalPatchFlat] = GetPrincipalAxesFromBarycentric(LocalPatchFlat, Triangles, E, fi);
+	numOfTriangles = size(LocalPatchFlat.TriID, 2);
+	
+	LocalPatchFlat.PrincipalAxes = zeros(numOfTriangles, 3);
+	for i = 1 : numOfTriangles
+		TriangleVertexIDs = Triangles(LocalPatchFlat.TriID(i), :);
+		CorrectVertexIDs = zeros(3, 1);
+		for j = 1 : 3			
+			nextVertexId = TriangleVertexIDs(j);
+			CorrectVertexIDs(j) = find(LocalPatchFlat.VertID == nextVertexId);
+		end % for
+		BarCoord = cell2mat(E(LocalPatchFlat.TriID(i), fi));
+		LocalPatchFlat.PrincipalAxes(i, :) = Barycentric2Cartesian(BarCoord, ...
+		LocalPatchFlat.XYZ(CorrectVertexIDs, :));
+	end % for
+end % function
+
+function [LocalPatch, Frames] = GetTriPatch(Vertices, Triangles, AdjMatrix, vi, sigma, tau)    
     % First, get vertex n-ring around interest point at characteristic scale
-    numOfRings = 1;
+    numOfRings = 1; % 
     VertID = GetNRing(AdjMatrix, vi, numOfRings);    
-    % Second, compute triangle nring out of vertex n-ring
+    % Second, compute triangle n-ring out of vertex n-ring
     TriID = triRing(VertID, Triangles, AdjMatrix, vi);
     
-    % Get all unique vertex IDs within the trianlge n-ring
+    % Get all unique vertex IDs within the triangle n-ring
     VertID = unique(Triangles(TriID,:));
     VertID = VertID(find(VertID ~= vi));
-    % Get coordinages of the vertices with n-ring patch
+    % Get coordinates of the vertices with n-ring patch
     XYZ = Vertices(VertID, :);
     % Add interest point coordinates on top    
     XYZ = [Vertices(vi, :); XYZ];
     
     numOfTri = size(TriID, 1);
-    XYZBary = zeros(numOfTri, 3);
-    %BaryID = zeros(numOfTri, 1);
-    for i = 1 : numOfTri
-        %BaryID(i) = TriID(i);
+	% Cartesian coordinates of triangle centroids
+    XYZCentroid = zeros(numOfTri, 3);
+    for i = 1 : numOfTri        
         TriangleVertexIDs = Triangles(TriID(i), :)';
-        XYZBary(i, :) = centroid(Vertices(TriangleVertexIDs, :));
+        XYZCentriod(i, :) = Centroid(Vertices(TriangleVertexIDs, :));
     end % for
     
     LocalPatch.XYZ = XYZ;  
-    LocalPatch.XYZBary = XYZBary;
+    LocalPatch.XYZCentroid = XYZCentroid;
     LocalPatch.VertID = [vi VertID'];    
-    LocalPatch.TriID = TriID;
+    LocalPatch.TriID = TriID';
     Frames = [1 2 3 4];    
 end % function
 
+
+%%
 function [triRing] = triRing(VertID, Triangles, AdjMatrix, vi)    
     triRing = [];
     numOfRingPoints = size(VertID, 1);
@@ -73,4 +93,3 @@ end % function
 function [OneRingPointIds] = GetOneRing(AdjMatrix, vi)
     OneRingPointIds = find(AdjMatrix(:, vi));
 end % function
-

@@ -67,10 +67,8 @@ function [DenseSurfPatchFlat] = interpolate2(SurfPatchFlat, DeformScalar, spaceS
 %     [d_est,d_var]=krig(pos_known,val_known,pos_est,V)
 
     
-    % The following rbf interpolation routines have high chance to have
-    % some subtle bugs (I can say this after short debugging)
-    %RBFFunction = GetRBFunction();
-    %rbf = rbfcreate(SparsePoints, DeformScalar,'RBFFunction', 'multiquadrics', 'Stats', 'on');     
+    % Old rbf interpolation method    
+    %rbf = rbfcreate(SparsePoints, DeformScalar,'RBFFunction', 'multiquadric', 'Stats', 'on');     
     %DenseDeformScalar = rbfinterp( DensePoints, rbf);    
     
     % Do good RBF interpolation

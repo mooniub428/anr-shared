@@ -1,4 +1,4 @@
-function [Histograms] = DescriptorFine(Vertices, VerticesOverFrames, DeformScalar, Adj, vi, fi, sigma, tau)
+function [Histogra  ms] = DescriptorFine(Vertices, VerticesOverFrames, DeformScalar, Adj, vi, fi, sigma, tau)
     % Get local surface patch at characteristic scales
     [SurfPatch, Frames] = GetSurfacePatch(Vertices, Adj, vi, sigma, tau);
     % Flattening stage
@@ -7,17 +7,17 @@ function [Histograms] = DescriptorFine(Vertices, VerticesOverFrames, DeformScala
     SurfPatchFlat.XYZ = [XY zeros(size(XY, 1), 1)]; 
     SurfPatchFlat.ID =  SurfPatch.ID;
 
-    spaceStep = 0.1'
+    spaceStep = 0.1;
     timeStep = 0.2;
     
     % Get coordinates of the interest point    
     [SurfPatchFlat] = TranslateRotateScale(SurfPatchFlat, [1 0 0]);
-    DenseSurfPatchFlat = interpolate2(SurfPatchFlat, DeformScalar(:, fi), spaceStep);
+    DenseSurfPatchFlat = interpolate2(SurfPatchFlat, DeformScalar(SurfPatchFlat.ID', fi), spaceStep);
     
     % Get dominant orientation with respect to gradients of surfaces
     % deformation values
     numOfBins = 18;
-    orientation = GetOrientation(DenseSurfPatchFlat, numOfBins, spaceStep);
+    orientation = GetOrientationScalarField(DenseSurfPatchFlat, numOfBins, spaceStep);
 
     SurfPatchFlat = TranslateRotateScale(SurfPatchFlat, orientation);
         
@@ -46,7 +46,7 @@ end % function
 
 %%
 function [DenseSurfPatchFlat] = interpolate2(SurfPatchFlat, DeformScalar, spaceStep)
-    DeformScalar = DeformScalar(SurfPatchFlat.ID');
+    %DeformScalar = DeformScalar(SurfPatchFlat.ID');
     DeformScalar = DeformScalar';
     SparsePoints = SurfPatchFlat.XYZ(:, 1:2)';
     v = -0.5 : spaceStep : 0.5;
@@ -54,64 +54,70 @@ function [DenseSurfPatchFlat] = interpolate2(SurfPatchFlat, DeformScalar, spaceS
     DensePoints = grid22vec2(DensePointsX, DensePointsY);
     DensePoints = DensePoints';
     
-    DenseDeformScalar = griddata(SparsePoints(1,:), SparsePoints(2,:), DeformScalar, DensePoints(1,:), DensePoints(2,:), 'nearest')';
+    % Old interpolation scheme, which always works, but does not yield the
+    % most precise results
+    % DenseDeformScalar = griddata(SparsePoints(1,:), SparsePoints(2,:), DeformScalar, DensePoints(1,:), DensePoints(2,:), 'v4')';
     
-    % Kriging
+    % First Kriging trials (not the most optimal implementation)
 %     pos_known = SparsePoints';
-%     val_known = DeformScalar'; % adding some uncertainty
+%     val_kn = DeformScalar'; % adding some uncertainty
 %     V='1 Sph(.2)';      % Select variogram model
 %     V = '1 Lin(1)';
 %     pos_est = DensePoints';
 %     [d_est,d_var]=krig(pos_known,val_known,pos_est,V)
 
     
-%      RBFFunction = GetRBFunction();
-%      rbf_x = rbfcreate(SparsePoints, DeformScalar,'RBFFunction', RBFFunction, 'Stats', 'on');
-%      rbf_y = rbfcreate(SparsePoints, DeformScalar,'RBFFunction', RBFFunction, 'Stats', 'on');    
-%  
-%      x = rbfinterp( DensePoints, rbf_x);
-%      y = rbfinterp( DensePoints, rbf_y);
-%     
-%      DenseDeformScalar = x';
-     DensePoints = DensePoints';
+    % The following rbf interpolation routines have high chance to have
+    % some subtle bugs (I can say this after short debugging)
+    %RBFFunction = GetRBFunction();
+    %rbf = rbfcreate(SparsePoints, DeformScalar,'RBFFunction', 'multiquadrics', 'Stats', 'on');     
+    %DenseDeformScalar = rbfinterp( DensePoints, rbf);    
+    
+    % Do good RBF interpolation
+    [x,y,z] = rbf(SparsePoints(1,:)', SparsePoints(2, :)', DeformScalar', DensePointsX, DensePointsY, 'multiquadratic');
+    InterpolatedData = grid32vec3(x, y, z);
+    DenseDeformScalar = InterpolatedData(:, 3);
+    
+    %DenseDeformScalar = DenseDeformScalar';       
+    DensePoints = DensePoints';
      
-     DenseSurfPatchFlat.v = v;
-     DenseSurfPatchFlat.XYZ = [DensePoints zeros(size(DensePoints, 1), 1)];
-     DenseSurfPatchFlat.DeformScalar = DenseDeformScalar;
+    DenseSurfPatchFlat.v = v;
+    DenseSurfPatchFlat.XYZ = [DensePoints zeros(size(DensePoints, 1), 1)];
+    DenseSurfPatchFlat.DeformScalar = DenseDeformScalar;
 end % function
 
 %%
-function [orientation] = GetOrientation(DenseSurfPatchFlat, numOfBins, spaceStep)       
-    [gx, gy] = gradient(vec12grid2(DenseSurfPatchFlat.DeformScalar), spaceStep, spaceStep);
-    %quiver(DenseSurfPatchFlat.v, DenseSurfPatchFlat.v, gx, gy)
-    DenseSurfPatchFlat.Gradient = grid22vec2(gx, gy);
-
-    [THETA, ~] = cart2pol(DenseSurfPatchFlat.Gradient(:, 1), DenseSurfPatchFlat.Gradient(:, 2));
-    numOfPoints = numel(THETA);
-    
-    HistOfGradient = zeros(numOfBins, 1);
-    
-    radialWidth = (2 * pi) / numOfBins;
-    for i = 1 : numOfPoints
-        angle = THETA(i);
-        angle = (sign(angle)==1) * angle + (sign(angle)==-1) * (2*pi + angle);
-        bin_id = ceil(angle / radialWidth);
-        if(bin_id == 0)
-            bin_id = 1;
-        end % if
-        
-        thePoint = DenseSurfPatchFlat.XYZ(i, :);
-        theGradient = DenseSurfPatchFlat.Gradient(i, :);
-        HistOfGradient(bin_id) = HistOfGradient(bin_id) + norm(theGradient) * norm(thePoint);
-    end % for
-    
-    maxBinId = find(HistOfGradient == max(HistOfGradient));
-    maxBinId = maxBinId(1);
-    angle = (maxBinId - 0.5) * radialWidth;
-    R = [[cos(angle) -sin(angle) 0];[sin(angle) cos(angle) 0];[0 0 1]];
-    orientation = R * [1 0 0]';
-    orientation = orientation';    
-end % function
+% function [orientation] = GetOrientation(DenseSurfPatchFlat, numOfBins, spaceStep)       
+%     [gx, gy] = gradient(vec12grid2(DenseSurfPatchFlat.DeformScalar), spaceStep, spaceStep);
+%     %quiver(DenseSurfPatchFlat.v, DenseSurfPatchFlat.v, gx, gy)
+%     DenseSurfPatchFlat.Gradient = grid22vec2(gx, gy);
+% 
+%     [THETA, ~] = cart2pol(DenseSurfPatchFlat.Gradient(:, 1), DenseSurfPatchFlat.Gradient(:, 2));
+%     numOfPoints = numel(THETA);
+%     
+%     HistOfGradient = zeros(numOfBins, 1);
+%     
+%     radialWidth = (2 * pi) / numOfBins;
+%     for i = 1 : numOfPoints
+%         angle = THETA(i);
+%         angle = (sign(angle)==1) * angle + (sign(angle)==-1) * (2*pi + angle);
+%         bin_id = ceil(angle / radialWidth);
+%         if(bin_id == 0)
+%             bin_id = 1;
+%         end % if
+%         
+%         thePoint = DenseSurfPatchFlat.XYZ(i, :);
+%         theGradient = DenseSurfPatchFlat.Gradient(i, :);
+%         HistOfGradient(bin_id) = HistOfGradient(bin_id) + norm(theGradient) * norm(thePoint);
+%     end % for
+%     
+%     maxBinId = find(HistOfGradient == max(HistOfGradient));
+%     maxBinId = maxBinId(1);
+%     angle = (maxBinId - 0.5) * radialWidth;
+%     R = [[cos(angle) -sin(angle) 0];[sin(angle) cos(angle) 0];[0 0 1]];
+%     orientation = R * [1 0 0]';
+%     orientation = orientation';    
+% end % function
 
 %%
 function [GradientsFull, Volume] = GetFullVolumeGradients(SurfPatchFlat, DeformScalar, Frames, spaceStep, timeStep)

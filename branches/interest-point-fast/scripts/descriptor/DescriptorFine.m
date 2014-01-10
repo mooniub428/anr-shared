@@ -1,4 +1,4 @@
-function [Histogra  ms] = DescriptorFine(Vertices, VerticesOverFrames, DeformScalar, Adj, vi, fi, sigma, tau)
+function [Histogra  ms] = DescriptorFine(Vertices, DeformScalar, Adj, vi, fi, sigma, tau)
     % Get local surface patch at characteristic scales
     [SurfPatch, Frames] = GetSurfacePatch(Vertices, Adj, vi, sigma, tau);
     % Flattening stage
@@ -11,7 +11,7 @@ function [Histogra  ms] = DescriptorFine(Vertices, VerticesOverFrames, DeformSca
     timeStep = 0.2;
     
     % Get coordinates of the interest point    
-    [SurfPatchFlat] = TranslateRotateScale(SurfPatchFlat, [1 0 0]);
+    [SurfPatchFlat] = TranslateRotateScaleScalarField(SurfPatchFlat, [1 0 0]);
     DenseSurfPatchFlat = interpolate2(SurfPatchFlat, DeformScalar(SurfPatchFlat.ID', fi), spaceStep);
     
     % Get dominant orientation with respect to gradients of surfaces
@@ -19,7 +19,7 @@ function [Histogra  ms] = DescriptorFine(Vertices, VerticesOverFrames, DeformSca
     numOfBins = 18;
     orientation = GetOrientationScalarField(DenseSurfPatchFlat, numOfBins, spaceStep);
 
-    SurfPatchFlat = TranslateRotateScale(SurfPatchFlat, orientation);
+    SurfPatchFlat = TranslateRotateScaleScalarField(SurfPatchFlat, orientation);
         
     [GradientsFull, Volume] = GetFullVolumeGradients(SurfPatchFlat, DeformScalar, Frames, spaceStep, timeStep);
             
@@ -33,7 +33,7 @@ function [SurfPatch, Frames] = GetSurfacePatch(Vertices, Adj, vi, sigma, tau)
        
     %ID = find(Adj(:, vi));
     ID = GetNRing(Adj, vi, 2)
-    
+    ID = ID(ID~=vi);
     XYZ = Vertices(ID, :);
         
     XYZ = [Vertices(vi, :); XYZ];
@@ -68,13 +68,13 @@ function [DenseSurfPatchFlat] = interpolate2(SurfPatchFlat, DeformScalar, spaceS
 
     
     % Old rbf interpolation method    
-    %rbf = rbfcreate(SparsePoints, DeformScalar,'RBFFunction', 'multiquadric', 'Stats', 'on');     
-    %DenseDeformScalar = rbfinterp( DensePoints, rbf);    
+    rbf = rbfcreate(SparsePoints, DeformScalar,'RBFFunction', 'multiquadratic', 'Stats', 'on');     
+    DenseDeformScalar = rbfinterp( DensePoints, rbf);    
     
     % Do good RBF interpolation
-    [x,y,z] = rbf(SparsePoints(1,:)', SparsePoints(2, :)', DeformScalar', DensePointsX, DensePointsY, 'multiquadratic');
-    InterpolatedData = grid32vec3(x, y, z);
-    DenseDeformScalar = InterpolatedData(:, 3);
+    %[x,y,z] = rbf(SparsePoints(1,:)', SparsePoints(2, :)', DeformScalar', DensePointsX, DensePointsY, 'multiquadratic');
+    %InterpolatedData = grid32vec3(x, y, z);
+    %DenseDeformScalar = InterpolatedData(:, 3);
     
     %DenseDeformScalar = DenseDeformScalar';       
     DensePoints = DensePoints';
@@ -84,38 +84,6 @@ function [DenseSurfPatchFlat] = interpolate2(SurfPatchFlat, DeformScalar, spaceS
     DenseSurfPatchFlat.DeformScalar = DenseDeformScalar;
 end % function
 
-%%
-% function [orientation] = GetOrientation(DenseSurfPatchFlat, numOfBins, spaceStep)       
-%     [gx, gy] = gradient(vec12grid2(DenseSurfPatchFlat.DeformScalar), spaceStep, spaceStep);
-%     %quiver(DenseSurfPatchFlat.v, DenseSurfPatchFlat.v, gx, gy)
-%     DenseSurfPatchFlat.Gradient = grid22vec2(gx, gy);
-% 
-%     [THETA, ~] = cart2pol(DenseSurfPatchFlat.Gradient(:, 1), DenseSurfPatchFlat.Gradient(:, 2));
-%     numOfPoints = numel(THETA);
-%     
-%     HistOfGradient = zeros(numOfBins, 1);
-%     
-%     radialWidth = (2 * pi) / numOfBins;
-%     for i = 1 : numOfPoints
-%         angle = THETA(i);
-%         angle = (sign(angle)==1) * angle + (sign(angle)==-1) * (2*pi + angle);
-%         bin_id = ceil(angle / radialWidth);
-%         if(bin_id == 0)
-%             bin_id = 1;
-%         end % if
-%         
-%         thePoint = DenseSurfPatchFlat.XYZ(i, :);
-%         theGradient = DenseSurfPatchFlat.Gradient(i, :);
-%         HistOfGradient(bin_id) = HistOfGradient(bin_id) + norm(theGradient) * norm(thePoint);
-%     end % for
-%     
-%     maxBinId = find(HistOfGradient == max(HistOfGradient));
-%     maxBinId = maxBinId(1);
-%     angle = (maxBinId - 0.5) * radialWidth;
-%     R = [[cos(angle) -sin(angle) 0];[sin(angle) cos(angle) 0];[0 0 1]];
-%     orientation = R * [1 0 0]';
-%     orientation = orientation';    
-% end % function
 
 %%
 function [GradientsFull, Volume] = GetFullVolumeGradients(SurfPatchFlat, DeformScalar, Frames, spaceStep, timeStep)
@@ -137,7 +105,7 @@ function [GradientsFull, Volume] = GetFullVolumeGradients(SurfPatchFlat, DeformS
     Volume.upperMargin = upperMargin;
     
     % Interpolate
-    DenseVolume = interpolate3(Volume, spaceStep, timeStep);        
+    DenseVolume = Interpolate3(Volume, spaceStep, timeStep);        
     
     % Compute gradient
     nx = numel(DenseVolume.vxy);
@@ -151,113 +119,4 @@ function [GradientsFull, Volume] = GetFullVolumeGradients(SurfPatchFlat, DeformS
     
     GradientsFull.Gradients = grid32vec3(gx, gy, gz);
     GradientsFull.XYZ = grid32vec3(DenseVolume.DensePointsX, DenseVolume.DensePointsY, DenseVolume.DensePointsZ);
-end % function
-%%
-function [Histograms] = GetHistograms(GradientsFull, Volume, numOfBins)
-    % Histograms are composed in 8 octants as in 3D SIFT
-    Histograms = cell(8, 1);
-    % Init histograms
-    for i = 1 : 8        
-        Histograms(i) = mat2cell(zeros(numOfBins, numOfBins/2));        
-    end % for
-    
-    % Number of points/samples in which gradients were estimated
-    numOfPoints = size(GradientsFull.XYZ, 1);
-    % Transform Cartesian coordinates of samples to spherical
-    [azimuth, elevation, ~] = cart2sph(GradientsFull.XYZ(:, 1), GradientsFull.XYZ(:, 2), GradientsFull.XYZ(:, 3));
-    
-    for i = 1 : numOfPoints
-        THETA = azimuth(i);
-        PHI = elevation(i);
-        
-        % Determine octant        
-        [octantId, octantCenter] = GetOctantId(THETA, PHI, Volume);
-                
-        % Determine bin 
-        radialWidth = 2 * pi / numOfBins;        
-
-        % Update the bin in corresponding octant
-        gradient = GradientsFull.Gradients(i, :);
-        point = GradientsFull.XYZ(i, :);
-        Histograms = updateBinWith(gradient, point, Histograms, octantId, octantCenter, radialWidth);                                        
-    end % for
-end % function
-
-function [Histograms] = updateBinWith(gradient, point, Histograms, octantId, octantCenter, radialWidth)
-    [THETAGrad, PHIGrad, ~] = cart2sph(gradient(1), gradient(2), gradient(3));
-    [binIdTHETA, binIdPHI] = GetBinId(THETAGrad, PHIGrad, radialWidth);
-    H = cell2mat(Histograms(octantId));
-    H(binIdTHETA, binIdPHI) = H(binIdTHETA, binIdPHI) + norm(gradient) * norm(point - octantCenter);
-    Histograms(octantId) = mat2cell(H);
-end % function
-
-% 
-function [octantId, octantCenter] = GetOctantId(THETA, PHI, Volume)
-    if(PHI >= 0)
-        if(THETA > 0)
-            if(THETA < pi/2)
-                octantId = 1;
-                octantCenter = [0.5 0.5 Volume.upperMargin/2];
-            else
-                octantId = 2;
-                octantCenter = [-0.5 0.5 Volume.upperMargin/2];
-            end % if
-        else
-            if(THETA < -pi/2)
-                octantId = 3;
-                octantCenter = [-0.5 -0.5 Volume.upperMargin/2];
-            else
-                octantId = 4;
-                octantCenter = [0.5 -0.5 Volume.upperMargin/2];
-            end % if
-        end % if
-    else
-        if(THETA > 0)
-            if(THETA < pi/2)
-                octantId = 5;
-                octantCenter = [0.5 0.5 -Volume.upperMargin/2];
-            else
-                octantId = 6;
-                octantCenter = [-0.5 0.5 Volume.upperMargin/2];
-            end % if
-        else
-            if(THETA < -pi/2)
-                octantId = 7;
-                octantCenter = [-0.5 -0.5 Volume.upperMargin/2];
-            else
-                octantId = 8;
-                octantCenter = [0.5 -0.5 Volume.upperMargin/2];
-            end % if
-        end % if
-    end % if
-end % function
-
-function [binIdTHETA, binIdPHI] = GetBinId(THETAGrad, PHIGrad, radialWidth)
-    THETAGrad = (sign(THETAGrad)==1) * THETAGrad + (sign(THETAGrad)==-1) * (2*pi + THETAGrad);
-    PHIGrad = (sign(PHIGrad)==1) * PHIGrad + (sign(PHIGrad)==-1) * (pi + PHIGrad);
-    
-    binIdTHETA = ceil(THETAGrad / radialWidth);
-    binIdTHETA = binIdTHETA + (binIdTHETA == 0);
-    
-    binIdPHI = ceil(PHIGrad / radialWidth);
-    binIdPHI = binIdPHI + (binIdPHI == 0);
-end % function
-
-function [NRingPointIds] = GetNRing(AdjMatrix, vi, n)
-    NRingPointIds = [];
-    if(n == 1)
-        NRingPointIds = GetOneRing(AdjMatrix, vi);
-    else
-        OneRingPointIds = GetOneRing(AdjMatrix, vi);
-        numOfOneRingPoints = numel(OneRingPointIds);
-        for i = 1 : numOfOneRingPoints
-            nextVi = OneRingPointIds(i);
-            NRingPointIds = [NRingPointIds; nextVi; GetNRing(AdjMatrix, nextVi, n - 1)];
-        end % for
-    end %if
-    NRingPointIds = unique(NRingPointIds);
-end % function
-
-function [OneRingPointIds] = GetOneRing(AdjMatrix, vi)
-    OneRingPointIds = find(AdjMatrix(:, vi));
 end % function

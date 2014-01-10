@@ -1,6 +1,6 @@
 % Translate surface patch SurfacePatch to centerPoint
 % Rotate the world coordinate system x
-function [SurfacePatch] = TranslateRotateScale(SurfacePatch, orientation)
+function [SurfacePatch] = TranslateRotateScaleScalarField(SurfacePatch, orientation)
 
 Points = SurfacePatch.XYZ;
 % Translate

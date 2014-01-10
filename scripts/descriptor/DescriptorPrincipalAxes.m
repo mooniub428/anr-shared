@@ -30,8 +30,8 @@ function [] = DescriptorPrincipalAxes(Vertices, Triangles, E, Adj, vi, fi, sigma
         
     [Volume] = GetFullVolumeVectorField(LocalPatchFlat, Triangles, E, Frames, spaceStep, timeStep);
             
-    %Histograms = GetHistograms(GradientsFull, Volume, numOfBins);  
-    %Histograms = InterpolateAllHistograms(Histograms);
+    Histograms = GetHistogramsOfPrincipalAxes(Volume, numOfBins);  
+    Histograms = InterpolateAllHistograms(Histograms);
 end % function
 
 %%

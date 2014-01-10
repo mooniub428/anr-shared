@@ -105,15 +105,15 @@ function [GradientsFull, Volume] = GetFullVolumeGradients(SurfPatchFlat, DeformS
     Volume.upperMargin = upperMargin;
     
     % Interpolate
-    DenseVolume = Interpolate3(Volume, spaceStep, timeStep);        
+    DenseVolume = Interpolate3G(Volume, spaceStep, timeStep);        
     
     % Compute gradient
     nx = numel(DenseVolume.vxy);
     ny = numel(DenseVolume.vxy);
     nz = numel(DenseVolume.vz);
-    
-    [gx, gy, gz] = gradient(DenseVolume.DeformScalar, spaceStep, spaceStep, timeStep);
-    %[gx, gy, gz] = gradient(vec12grid3(DenseVolume.DeformScalar, nx, ny, nz), spaceStep, spaceStep, timeStep);
+        
+    % [gx, gy, gz] = gradient(DenseVolume.DeformScalar, spaceStep, spaceStep, timeStep);
+    [gx, gy, gz] = gradient(vec12grid3(DenseVolume.DeformScalar, nx, ny, nz), spaceStep, spaceStep, timeStep);
     
     quiver3(DenseVolume.DensePointsX, DenseVolume.DensePointsY, DenseVolume.DensePointsZ, gx, gy, gz);
     

@@ -1,4 +1,4 @@
-function [DenseVolume] = interpolate3(Volume, spaceStep, timeStep)
+function [DenseVolume] = Interpolate3G(Volume, spaceStep, timeStep)
     
     DeformScalar = Volume.DeformScalar';
     
@@ -18,19 +18,13 @@ function [DenseVolume] = interpolate3(Volume, spaceStep, timeStep)
     xq = DensePointsX;
     yq = DensePointsY;
     zq = DensePointsZ;
-    Interpolator = TriScatteredInterp(x,y,z,v,'nearest');
-    DenseVolumeScalar = Interpolator(xq, yq, zq);
+%     Interpolator = TriScatteredInterp(x,y,z,v,'nearest');
+%     DenseVolumeScalar = Interpolator(xq, yq, zq);
     
-%     RBFFunction = GetRBFunction();
-%     rbf_x = rbfcreate(SparsePoints, DeformScalar,'RBFFunction', RBFFunction, 'Stats', 'on');
-%     rbf_y = rbfcreate(SparsePoints, DeformScalar,'RBFFunction', RBFFunction, 'Stats', 'on');    
-%     rbf_z = rbfcreate(SparsePoints, DeformScalar,'RBFFunction', RBFFunction, 'Stats', 'on'); 
-%  
-%     x = rbfinterp(DensePoints, rbf_x);
-%     y = rbfinterp(DensePoints, rbf_y);
-%     z = rbfinterp(DensePoints, rbf_z);
-%     
-%     DenseDeformScalar = x';
+
+    rbf = rbfcreate(SparsePoints, DeformScalar,'RBFFunction', 'multiquadratic', 'Stats', 'on');
+    InterpolatedData = rbfinterp(DensePoints, rbf);
+    DenseVolumeScalar = InterpolatedData';
     DensePoints = DensePoints';
      
     DenseVolume.DensePointsX = DensePointsX;
@@ -39,7 +33,6 @@ function [DenseVolume] = interpolate3(Volume, spaceStep, timeStep)
     DenseVolume.vxy = vxy;
     DenseVolume.vz = vz;
     
-    DenseVolume.XYZ = DensePoints;
-    %DenseVolume.DeformScalar = DenseDeformScalar;
+    DenseVolume.XYZ = DensePoints;    
     DenseVolume.DeformScalar = DenseVolumeScalar;
 end % function

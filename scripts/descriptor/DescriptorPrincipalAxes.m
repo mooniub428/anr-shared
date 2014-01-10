@@ -60,6 +60,7 @@ function [Volume] = GetFullVolumeVectorField(LocalPatchFlat, Triangles, E, Frame
         else
             LocalPatchWithAxesAtFrame = GetPrincipalAxesFromBarycentric(LocalPatchFlat, Triangles, E, fi);
             Volume.PrincipalAxes((counter -1) * numOfCentroids + 1 : counter * numOfCentroids, 1:3) = LocalPatchWithAxesAtFrame.PrincipalAxes;
+            Volume.PrincipalAxes((counter -1) * numOfCentroids + 1 : counter * numOfCentroids, 3) = repmat(fi, numOfCentroids, 1);
         end % if
         counter = counter + 1;
     end % for
@@ -71,7 +72,7 @@ function [Volume] = GetFullVolumeVectorField(LocalPatchFlat, Triangles, E, Frame
     Volume.upperMargin = upperMargin;
     
     % Interpolate
-    DenseVolume = interpolate3(Volume, spaceStep, timeStep);                 
+    Volume = Interpolate3PA(Volume, spaceStep, timeStep);                 
 %   quiver3(DenseVolume.DensePointsX, DenseVolume.DensePointsY, DenseVolume.DensePointsZ, gx, gy, gz);    
 end % function
 
@@ -100,10 +101,6 @@ function [DenseLocalPatchFlat] = Interpolate2(LocalPatchFlat, spaceStep)
     XYZCentroid = grid22vec2(DensePointsX, DensePointsY);
     DenseLocalPatchFlat.XYZCentroid = [XYZCentroid zeros(size(InterpolatedPrincipalAxeY, 1), 1)];
     DenseLocalPatchFlat.DensePrincipalAxes = [InterpolatedPrincipalAxeX InterpolatedPrincipalAxeY zeros(size(InterpolatedPrincipalAxeY, 1), 1)];
-end % function
-
-function [DenseVolume] = interpolate3(Volume, spaceStep, timeStep)
-    DenseVolume = Volume;
 end % function
 
 % Compute principal strain axes in a flattened patch out of their

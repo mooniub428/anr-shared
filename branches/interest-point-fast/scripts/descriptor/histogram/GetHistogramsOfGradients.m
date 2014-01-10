@@ -1,4 +1,4 @@
-function [Histograms] = GetHistograms(GradientsFull, Volume, numOfBins)
+function [Histograms] = GetHistogramsOfGradients(GradientsFull, Volume, numOfBins)
     % Histograms are composed in 8 octants as in 3D SIFT
     Histograms = cell(8, 1);
     % Init histograms

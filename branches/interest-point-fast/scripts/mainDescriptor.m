@@ -23,8 +23,8 @@ A = full(A); % get full matrix from a sparse matrix
 sigma = param.smooth_num_space;
 tau = param.smooth_num_time;
 
-DescriptorFine(objseq.vertices, D_, A, 258, 2, sigma, tau);
-%DescriptorPrincipalAxes(objseq.vertices, objseq.triangles, E, A, 258, 2, sigma, tau);
+%DescriptorFine(objseq.vertices, D_, A, 258, 2, sigma, tau);
+DescriptorPrincipalAxes(objseq.vertices, objseq.triangles, E, A, 258, 2, sigma, tau);
 
 %H2 = Descriptor(objseq.vertices, objseq, D_, A, 20, 2, sigma, tau);
 %H1-H2

@@ -2,7 +2,7 @@
 % nodes of regular 2d grid
 %
 function [orientation] = GetOrientationScalarField(DenseSurfPatchFlat, numOfBins, spaceStep)       
-    [gx, gy] = gradient(vec12grid2(DenseSurfPatchFlat.DeformScalar), spaceStep, spaceStep);
+    [gx, gy] = gradient(vec12grid2(DenseSurfPatchFlat.DeformScalar'), spaceStep, spaceStep);
     %quiver(DenseSurfPatchFlat.v, DenseSurfPatchFlat.v, gx, gy)
     DenseSurfPatchFlat.Gradient = grid22vec2(gx, gy);
 

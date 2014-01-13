@@ -14,16 +14,16 @@ fprintf(fid, 'ss = SplineShape pos:[0,0,0]\n');
 % Write next spline
 numOfVectors = size(VectorsStart, 1);
 for i = 1 : numOfVectors
-    fprintf(fid, 'addNewSpline SplineSegment\n');
-    fprintf(fid, 'addKnot SplineSegment %d #corner #line ', i);
+    fprintf(fid, 'addNewSpline ss\n');
+    fprintf(fid, 'addKnot ss %d #corner #line ', i);
     
     fprintf(fid, '[');
     for k = 1 : 2
-        fprintf(fid, '%f,', VectorsEnd(i, k));
+        fprintf(fid, '%f,', VectorsStart(i, k));
     end % FOR
-    fprintf(fid, '%f]\n', VectorsEnd(i, k + 1));
+    fprintf(fid, '%f]\n', VectorsStart(i, k + 1));
     
-    fprintf(fid, 'addKnot SplineSegment %d #corner #line ', i);
+    fprintf(fid, 'addKnot ss %d #corner #line ', i);
     fprintf(fid, '[');
     for k = 1 : 2
         fprintf(fid, '%f,', VectorsEnd(i, k));

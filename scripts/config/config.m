@@ -22,6 +22,9 @@ param.extended_DoG = true;
 param.space_DoG = false;
 
 param.step = 3; % Defines how many 1-ring smoothings spawn one octave
+param.space_step = 0.1;
+param.time_step = 0.1; % sampling interval in space domain inside characteristic volume
+param.space_step = 0.1; % sampling interbal in time domain inside characteristic volume
 
 % Minimal magnitude of principal strain taken into consideration
 param.strain_min = 0.01;

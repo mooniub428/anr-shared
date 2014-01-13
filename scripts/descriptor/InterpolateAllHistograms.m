@@ -19,7 +19,7 @@ function [H] = InterpolateSingleHistogram(H)
             end % for
         end % for
     end % for     
-    smoothhist2D(X, 2, [numRows numCols])
+    smoothhist2D(X, 1, [numRows numCols])
     
     %x = row;
     %y = col;    

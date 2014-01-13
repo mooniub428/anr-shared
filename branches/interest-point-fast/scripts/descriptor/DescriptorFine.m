@@ -1,4 +1,4 @@
-function [Histogra  ms] = DescriptorFine(Vertices, DeformScalar, Adj, vi, fi, sigma, tau)
+function [Histograms] = DescriptorFine(Vertices, DeformScalar, Adj, vi, fi, sigma, tau, param)
     % Get local surface patch at characteristic scales
     [SurfPatch, Frames] = GetSurfacePatch(Vertices, Adj, vi, sigma, tau);
     % Flattening stage
@@ -7,8 +7,8 @@ function [Histogra  ms] = DescriptorFine(Vertices, DeformScalar, Adj, vi, fi, si
     SurfPatchFlat.XYZ = [XY zeros(size(XY, 1), 1)]; 
     SurfPatchFlat.ID =  SurfPatch.ID;
 
-    spaceStep = 0.1;
-    timeStep = 0.2;
+    spaceStep = param.space_step;
+    timeStep = param.time_step;
     
     % Get coordinates of the interest point    
     [SurfPatchFlat] = TranslateRotateScaleScalarField(SurfPatchFlat, [1 0 0]);

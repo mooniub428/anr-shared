@@ -3,7 +3,10 @@
 load_coretools();
 
 % Load configuration
+%param = config('c2');
 param = config('descriptor_test2');
+%param = config('descriptor_test_horse');
+%param = config('descriptor_test_camel');
 %param = config('triangle');
 
 %% Surface deformation
@@ -23,8 +26,14 @@ A = full(A); % get full matrix from a sparse matrix
 sigma = param.smooth_num_space;
 tau = param.smooth_num_time;
 
-%DescriptorFine(objseq.vertices, D_, A, 258, 2, sigma, tau);
-DescriptorPrincipalAxes(objseq.vertices, objseq.triangles, E, A, 258, 2, sigma, tau);
+vi = 263;
+vi = 257;
+fi = 2;
+%HistogramsGradients = DescriptorFine(objseq.vertices, D_, A, vi, fi, sigma, tau, param);
+HistogramsPrincipalAxes = DescriptorPrincipalAxes(objseq.vertices, objseq.triangles, E, A, vi, fi, sigma, tau, param);
+
+%save('HorseDescriptor.mat', 'HistogramsGradients', 'HistogramsPrincipalAxes');
+%save('CamelDescriptor.mat', 'HistogramsGradients', 'HistogramsPrincipalAxes');
 
 %H2 = Descriptor(objseq.vertices, objseq, D_, A, 20, 2, sigma, tau);
 %H1-H2

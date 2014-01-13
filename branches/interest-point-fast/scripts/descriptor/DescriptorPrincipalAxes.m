@@ -1,6 +1,6 @@
 % Compute 2d radial histogram descriptor based on surface deformation
 % principal axes
-function [] = DescriptorPrincipalAxes(Vertices, Triangles, E, Adj, vi, fi, sigma, tau)
+function [Histograms] = DescriptorPrincipalAxes(Vertices, Triangles, E, Adj, vi, fi, sigma, tau, param)
     % Get local triangle patch around the interest point
     [LocalPatch, Frames] = GetTriPatch(Vertices, Triangles, Adj, vi, sigma, tau);
     
@@ -19,6 +19,7 @@ function [] = DescriptorPrincipalAxes(Vertices, Triangles, E, Adj, vi, fi, sigma
     % coordinates LocalPatchFlat.PrincipalAxes
     LocalPatchFlat = GetPrincipalAxesFromBarycentric(LocalPatchFlat, Triangles, E, fi);
     TranslateRotateScaleVectorField(LocalPatchFlat, [1 0 0]);
+    Vectors2MaxscriptSplines(LocalPatchFlat.XYZCentroid, LocalPatchFlat.XYZCentroid + LocalPatchFlat.PrincipalAxes);
     DenseLocalPatchFlat = Interpolate2(LocalPatchFlat, spaceStep);
     
     % Get dominant orientation with respect to gradients of surfaces
@@ -73,7 +74,8 @@ function [Volume] = GetFullVolumeVectorField(LocalPatchFlat, Triangles, E, Frame
     
     % Interpolate
     Volume = Interpolate3PA(Volume, spaceStep, timeStep);                 
-%   quiver3(DenseVolume.DensePointsX, DenseVolume.DensePointsY, DenseVolume.DensePointsZ, gx, gy, gz);    
+    [qx, qy, qz] = vec32grid3(Volume.PrincipalAxes, Volume.nx, Volume.ny, Volume.nz);
+   quiver3(Volume.DensePointsX, Volume.DensePointsY, Volume.DensePointsZ, qx, qy, qz);    
 end % function
 
 % Densely interpolate principal deformation axes within flattened surface

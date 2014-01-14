@@ -8,6 +8,9 @@ if (fid == -1)
     error(Msg);
 end % if
 
+% Define function
+fprintf(fid, 'function generate_splines = \n ( \n');
+
 % Define spline shape
 fprintf(fid, 'ss = SplineShape pos:[0,0,0]\n');
 
@@ -32,6 +35,7 @@ for i = 1 : numOfVectors
 end % for
 
 fprintf(fid, 'updateShape ss\n');
+fprintf(fid, ')');
 
 % Close the file
 fclose(fid);

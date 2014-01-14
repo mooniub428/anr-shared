@@ -27,7 +27,7 @@ param.time_step = 0.1; % sampling interval in space domain inside characteristic
 param.space_step = 0.1; % sampling interbal in time domain inside characteristic volume
 
 % Minimal magnitude of principal strain taken into consideration
-param.strain_min = 0.01;
+param.strain_min = 0.0001;
 param.feature_response_min = 0.04;
 
 end % function

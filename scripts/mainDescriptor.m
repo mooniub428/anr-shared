@@ -15,6 +15,8 @@ objseq = objseq2mat(param);
 
 % Compute surface deformation
 [D, E] = recompute_strain(objseq.V, objseq.triangles, objseq.n_f, objseq.n_t);
+ExportDeformationAxes(objseq, param, D, E, 2);
+
 % Switch from triangle to vertex strain formulation
 D_ = tri2vert_strain(D, objseq.triangles, objseq.n_v, objseq.n_f);
 

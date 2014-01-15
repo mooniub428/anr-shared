@@ -10,6 +10,9 @@ disp('*');
 D = zeros(n_t, n_f);
 E = cell(n_t, n_f);
 
+% There are no axes in the first frame
+E(:, 1) = {zeros(1, 3)};
+
 for f_i = 2 : n_f % iterate over all frames
     disp(['Recompute strain :: Processing frame ' int2str(f_i)]);
     for t_i = 1 : n_t % compute shear values for each triangle

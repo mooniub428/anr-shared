@@ -17,6 +17,10 @@ Points = Points';
 Centroids = R * Centroids';
 Centroids = Centroids';
 
+% Rotate principal axes
+SurfacePatch.PrincipalAxes = R * SurfacePatch.PrincipalAxes';
+SurfacePatch.PrincipalAxes = SurfacePatch.PrincipalAxes';
+
 % Scale
 %Points = Points / (2 * max(pdist(Points, 'euclidean')));
 Points = Points / (2 * max(abs(Points(:, 1))));

@@ -23,7 +23,7 @@ function [Histograms] = GetHistogramsOfPrincipalAxes(Volume, numOfBins)
         % Update the bin in corresponding octant
         theAxis = Volume.PrincipalAxes(i, :);
         point = Volume.XYZCentroid(i, :);
-        Histograms = UpdateBinWith(theAxis, point, Histograms, octantId, octantCenter, radialWidth);                                        
+        Histograms = UpdateBinWith((theAxis - point), point, Histograms, octantId, octantCenter, radialWidth);                                        
     end % for
 end % function
 

@@ -17,6 +17,7 @@ function [DenseVolume] = Interpolate3PA(Volume, spaceStep, timeStep)
     y = SparsePoints(2,:)';
     z = SparsePoints(3,:)';
     
+    % Dimensions of the dense volumetric grid
     DenseVolume.nx = size(DensePointsY, 1);
     DenseVolume.ny = size(DensePointsY, 2);
     DenseVolume.nz = size(DensePointsY, 3);

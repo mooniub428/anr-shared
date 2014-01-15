@@ -17,6 +17,9 @@ param.smooth_num_time = 13;
 param.wt = 3; % time window size
 param.ws = 1; % space window size (ring unit)
 
+% Interpolate principal axes in volumeric way?
+param.interpolate_3d = false;
+
 param.diag_DoG = false;
 param.extended_DoG = true;
 param.space_DoG = false;

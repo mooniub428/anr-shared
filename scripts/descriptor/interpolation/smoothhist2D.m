@@ -1,4 +1,4 @@
-function smoothhist2D(X,lambda,nbins,outliercutoff,plottype)
+function [F] = smoothhist2D(X,lambda,nbins,outliercutoff,plottype)
 % SMOOTHHIST2D Plot a smoothed histogram of bivariate data.
 %   SMOOTHHIST2D(X,LAMBDA,NBINS) plots a smoothed histogram of the bivariate
 %   data in the N-by-2 matrix X.  Rows of X correspond to observations.  The

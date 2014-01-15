@@ -5,7 +5,7 @@ function [Histograms] = DescriptorFine(Vertices, DeformScalar, Adj, vi, fi, sigm
     SurfPatch.XYZ
     XY = pca(SurfPatch.XYZ, 2);
     SurfPatchFlat.XYZ = [XY zeros(size(XY, 1), 1)]; 
-    SurfPatchFlat.ID =  SurfPatch.ID;
+    SurfPatchFlat.ID =  SurfPatch.ID;     
 
     spaceStep = param.space_step;
     timeStep = param.time_step;

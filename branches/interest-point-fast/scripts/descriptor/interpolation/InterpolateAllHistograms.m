@@ -7,7 +7,7 @@ end % function
 
 function [H] = InterpolateSingleHistogram(H)
     [numRows, numCols] = size(H);
-    [row, col, v] = find(H);
+    %[row, col, v] = find(H);
     
     X = [];
     H = H / max(max(H));
@@ -19,7 +19,8 @@ function [H] = InterpolateSingleHistogram(H)
             end % for
         end % for
     end % for     
-    smoothhist2D(X, 0.5, [numRows numCols])
+    
+    X = smoothhist2D(X, 0.5, [numRows numCols], [], 'surf');
     
     %x = row;
     %y = col;    

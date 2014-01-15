@@ -3,8 +3,8 @@
 load_coretools();
 
 % Load configuration
-%param = config('c2');
-param = config('descriptor_test2');
+param = config('cylinder');
+%param = config('descriptor_test2');
 %param = config('descriptor_test_horse');
 %param = config('descriptor_test_camel');
 %param = config('triangle');
@@ -29,11 +29,14 @@ sigma = param.smooth_num_space;
 tau = param.smooth_num_time;
 
 vi = 263;
+%vi = 227;
 %vi = 257;
-vi=143;
-fi = 2;
-%HistogramsGradients = DescriptorFine(objseq.vertices, D_, A, vi, fi, sigma, tau, param);
-HistogramsPrincipalAxes = DescriptorPrincipalAxes(objseq.vertices, objseq.triangles, E, A, vi, fi, sigma, tau, param);
+%vi=143;
+fi = 21;
+% Apply threshold on minimal deformation value
+D_(D_ < param.strain_min) = 0.0;
+HoG = DescriptorFine(objseq.vertices, D_, A, vi, fi, sigma, tau, param);
+HoP = DescriptorPrincipalAxes(objseq.vertices, objseq.triangles, E, A, vi, fi, sigma, tau, param);
 
 %save('HorseDescriptor.mat', 'HistogramsGradients', 'HistogramsPrincipalAxes');
 %save('CamelDescriptor.mat', 'HistogramsGradients', 'HistogramsPrincipalAxes');

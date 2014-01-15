@@ -30,7 +30,7 @@ function [Histograms] = DescriptorPrincipalAxes(Vertices, Triangles, E, Adj, vi,
     LocalPatchFlat = TranslateRotateScaleVectorField(LocalPatchFlat, orientation);
         
     if(param.interpolate_3d)
-        [Volume] = GetFullVolumeVectorField(LocalPatchFlat, Triangles, E, Frames, spaceStep, timeStep);
+        [Volume] = GetFullVolumeVectorField(LocalPatchFlat, Triangles, E, orientation, Frames, spaceStep, timeStep);
     else
         [Volume] = GetFullVolumePatchwise(LocalPatchFlat, Triangles, E, orientation, Frames, spaceStep, timeStep);
     end % if

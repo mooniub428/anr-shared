@@ -18,7 +18,7 @@ param.wt = 3; % time window size
 param.ws = 1; % space window size (ring unit)
 
 % Interpolate principal axes in volumeric way?
-param.interpolate_3d = false;
+param.interpolate_3d = true;
 
 param.diag_DoG = false;
 param.extended_DoG = true;

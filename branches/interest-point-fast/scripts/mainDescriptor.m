@@ -29,7 +29,8 @@ sigma = param.smooth_num_space;
 tau = param.smooth_num_time;
 
 vi = 263;
-vi = 257;
+%vi = 257;
+vi=143;
 fi = 2;
 %HistogramsGradients = DescriptorFine(objseq.vertices, D_, A, vi, fi, sigma, tau, param);
 HistogramsPrincipalAxes = DescriptorPrincipalAxes(objseq.vertices, objseq.triangles, E, A, vi, fi, sigma, tau, param);

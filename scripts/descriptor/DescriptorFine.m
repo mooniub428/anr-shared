@@ -1,6 +1,6 @@
-function [Histograms] = DescriptorFine(Vertices, DeformScalar, Adj, vi, fi, sigma, tau, param)
+function [Histograms, Volume] = DescriptorFine(Vertices, DeformScalar, Adj, vi, fi, sigma, tau, param)
     % Get local surface patch at characteristic scales
-    [SurfPatch, Frames] = GetSurfacePatch(Vertices, Adj, vi, sigma, tau);
+    [SurfPatch, Frames] = GetSurfacePatch(Vertices, Adj, vi, fi, sigma, tau);
     % Flattening stage
     SurfPatch.XYZ
     XY = pca(SurfPatch.XYZ, 2);
@@ -28,7 +28,7 @@ function [Histograms] = DescriptorFine(Vertices, DeformScalar, Adj, vi, fi, sigm
 end % function
 
 % Unfinished
-function [SurfPatch, Frames] = GetSurfacePatch(Vertices, Adj, vi, sigma, tau)
+function [SurfPatch, Frames] = GetSurfacePatch(Vertices, Adj, vi, fi, sigma, tau)
     numVertices = size(Vertices, 1);
        
     %ID = find(Adj(:, vi));
@@ -41,7 +41,7 @@ function [SurfPatch, Frames] = GetSurfacePatch(Vertices, Adj, vi, sigma, tau)
     
     SurfPatch.ID = [vi ID'];
     
-    Frames = [1 2 3 4];
+    Frames = Tau2NumOfFrames(fi, tau);
 end % function
 
 %%

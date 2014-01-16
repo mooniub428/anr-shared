@@ -1,4 +1,4 @@
-function [LocalPatch, Frames] = GetTriPatch(Vertices, Triangles, AdjMatrix, vi, sigma, tau)    
+function [LocalPatch, Frames] = GetTriPatch(Vertices, Triangles, AdjMatrix, vi, fi, sigma, tau)    
     % First, get vertex n-ring around interest point at characteristic scale
     numOfRings = 1; % 
     VertID = GetNRing(AdjMatrix, vi, numOfRings);    
@@ -25,5 +25,5 @@ function [LocalPatch, Frames] = GetTriPatch(Vertices, Triangles, AdjMatrix, vi, 
     LocalPatch.XYZCentroid = XYZCentroid;
     LocalPatch.VertID = [vi VertID'];    
     LocalPatch.TriID = TriID';
-    Frames = [1 2 3 4];    
+    Frames = Tau2NumOfFrames(fi, tau); 
 end % function

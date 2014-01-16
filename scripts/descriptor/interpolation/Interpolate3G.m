@@ -4,7 +4,7 @@ function [DenseVolume] = Interpolate3G(Volume, spaceStep, timeStep)
     
     SparsePoints = Volume.XYZ';
     vxy = -0.5 : spaceStep : 0.5;
-    vz = -Volume.upperMargin : timeStep : Volume.upperMargin;
+    vz = -Volume.upperMargin : timeStep : Volume.upperMargin + 0.01;
     
     [DensePointsX, DensePointsY, DensePointsZ] = meshgrid(vxy, vxy, vz);
     

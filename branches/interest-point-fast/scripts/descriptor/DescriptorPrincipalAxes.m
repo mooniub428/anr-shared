@@ -1,8 +1,8 @@
 % Compute 2d radial histogram descriptor based on surface deformation
 % principal axes
-function [Histograms] = DescriptorPrincipalAxes(Vertices, Triangles, E, Adj, vi, fi, sigma, tau, param)
+function [Histograms] = DescriptorPrincipalAxes(Vertices, Triangles, VolumeWithPrincipalValues, E, Adj, vi, fi, sigma, tau, param)
     % Get local triangle patch around the interest point
-    [LocalPatch, Frames] = GetTriPatch(Vertices, Triangles, Adj, vi, sigma, tau);
+    [LocalPatch, Frames] = GetTriPatch(Vertices, Triangles, Adj, vi, fi, sigma, tau);
     
     % Flatten vertices within the patch    
     XY = pca([LocalPatch.XYZ; LocalPatch.XYZCentroid], 2);

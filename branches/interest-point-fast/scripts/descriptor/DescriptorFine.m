@@ -21,7 +21,7 @@ function [Histograms, Volume] = DescriptorFine(Vertices, DeformScalar, Adj, vi, 
 
     SurfPatchFlat = TranslateRotateScaleScalarField(SurfPatchFlat, orientation);
         
-    [GradientsFull, Volume] = GetFullVolumeGradients(SurfPatchFlat, DeformScalar, Frames, spaceStep, timeStep);
+    [GradientsFull, Volume] = GetFullVolumeGradients(SurfPatchFlat, DeformScalar, Frames, spaceStep, timeStep);    
             
     Histograms = GetHistogramsOfGradients(GradientsFull, Volume, numOfBins);  
     Histograms = InterpolateAllHistograms(Histograms);
@@ -106,6 +106,7 @@ function [GradientsFull, Volume] = GetFullVolumeGradients(SurfPatchFlat, DeformS
     
     % Interpolate
     DenseVolume = Interpolate3G(Volume, spaceStep, timeStep);        
+    Volume.DeformScalar = DenseVolume.DeformScalar;
     
     % Compute gradient
     nx = numel(DenseVolume.vxy);

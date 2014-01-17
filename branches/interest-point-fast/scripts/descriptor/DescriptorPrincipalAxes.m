@@ -1,6 +1,6 @@
 % Compute 2d radial histogram descriptor based on surface deformation
 % principal axes
-function [Histograms] = DescriptorPrincipalAxes(Vertices, Triangles, VolumeWithPrincipalValues, E, Adj, vi, fi, sigma, tau, param)
+function [Histograms] = DescriptorPrincipalAxes(Vertices, Triangles, VolumeWithDenselValues, E, Adj, vi, fi, sigma, tau, param)
     % Get local triangle patch around the interest point
     [LocalPatch, Frames] = GetTriPatch(Vertices, Triangles, Adj, vi, fi, sigma, tau);
     
@@ -19,7 +19,9 @@ function [Histograms] = DescriptorPrincipalAxes(Vertices, Triangles, VolumeWithP
     % coordinates LocalPatchFlat.PrincipalAxes
     LocalPatchFlat = GetPrincipalAxesFromBarycentric(LocalPatchFlat, Triangles, E, fi);
     TranslateRotateScaleVectorField(LocalPatchFlat, [1 0 0]);
-    Vectors2MaxscriptSplines(LocalPatchFlat.XYZCentroid, LocalPatchFlat.XYZCentroid + LocalPatchFlat.PrincipalAxes);
+    if(param.generate_splines)
+        Vectors2MaxscriptSplines(LocalPatchFlat.XYZCentroid, LocalPatchFlat.XYZCentroid + LocalPatchFlat.PrincipalAxes);
+    end % if
     DenseLocalPatchFlat = Interpolate2PA(LocalPatchFlat, spaceStep);
     
     % Get dominant orientation with respect to gradients of surfaces
@@ -35,7 +37,7 @@ function [Histograms] = DescriptorPrincipalAxes(Vertices, Triangles, VolumeWithP
         [Volume] = GetFullVolumePatchwise(LocalPatchFlat, Triangles, E, orientation, Frames, spaceStep, timeStep);
     end % if
             
-    Histograms = GetHistogramsOfPrincipalAxes(Volume, numOfBins);  
+    Histograms = GetHistogramsOfPrincipalAxes(Volume, VolumeWithDenselValues, numOfBins);  
     Histograms = InterpolateAllHistograms(Histograms);
 end % function
 

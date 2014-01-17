@@ -1,4 +1,4 @@
-function [Histograms] = GetHistogramsOfPrincipalAxes(Volume, numOfBins)
+function [Histograms] = GetHistogramsOfPrincipalAxes(Volume, VolumeWithDenselValues, numOfBins)
 % Histograms are composed in 8 octants as in 3D SIFT
     Histograms = cell(8, 1);
     % Init histograms
@@ -23,7 +23,8 @@ function [Histograms] = GetHistogramsOfPrincipalAxes(Volume, numOfBins)
         % Update the bin in corresponding octant
         theAxis = Volume.PrincipalAxes(i, :);
         point = Volume.XYZCentroid(i, :);
-        Histograms = UpdateBinWith((theAxis - point), point, Histograms, octantId, octantCenter, radialWidth);                                        
+        theVector = (theAxis - point) * abs(VolumeWithDenselValues.DeformScalar(i)); % scaled by principal strain value
+        Histograms = UpdateBinWith(theVector, point, Histograms, octantId, octantCenter, radialWidth);                                        
     end % for
 end % function
 

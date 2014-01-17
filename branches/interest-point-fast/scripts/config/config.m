@@ -7,7 +7,7 @@ function param = config(data_name)
 param.data_name = data_name;
 param.data_folder = ['../dyndat/' data_name '/']; 
 
-param.correct_indexing = false;
+param.correct_indexing = true;
 param.region_deformation = false;
 %param.smooth_num = 12; % Total number of octaves: smooth_num x smooth_num (recommended to be < 50) 
 
@@ -19,12 +19,13 @@ param.ws = 1; % space window size (ring unit)
 
 % Interpolate principal axes in volumeric way?
 param.interpolate_3d = true;
+param.generate_splines = false;
 
 param.diag_DoG = false;
 param.extended_DoG = true;
 param.space_DoG = false;
 
-param.step = 3; % Defines how many 1-ring smoothings spawn one octave
+param.step = 1; % Defines how many 1-ring smoothings spawn one octave
 param.space_step = 0.1;
 param.time_step = 0.1; % sampling interval in space domain inside characteristic volume
 param.space_step = 0.1; % sampling interbal in time domain inside characteristic volume

@@ -1,45 +1,46 @@
-%% Configuraiton
 % Load dependencies
 load_coretools();
 
 % Load configuration
-%param = config('cylinder');
-param = config('descriptor_test2');
-%param = config('descriptor_test_horse');
-%param = config('descriptor_test_camel');
-%param = config('triangle');
+dataNameSrc = 'cylinder';
+dataNameTrg = 'cylindernew';
+%data_name = 'horse';
+%data_name = 'camel';
 
-%% Surface deformation
-% Transform obj sequence into matlab readable format and load it (conditional)
-objseq = objseq2mat(param);
 
-% Compute surface deformation
-[D, E] = recompute_strain(objseq.V, objseq.triangles, objseq.n_f, objseq.n_t);
-ExportDeformationAxes(objseq, param, D, E, 2);
+viSrc = [263, 245]; % 479 299]';
+viTrg = [227, 198]; % 395 262]';
+fi = 23;
 
-% Switch from triangle to vertex strain formulation
-D_ = tri2vert_strain(D, objseq.triangles, objseq.n_v, objseq.n_f);
+DescriptorsSrc = GetDescriptors(dataNameSrc, viSrc, fi);
+DescriptorsTrg = GetDescriptors(dataNameTrg, viTrg, fi);
 
-%% Adjacency
-A = triangulation2adjacency(objseq, param, D_);
-A = full(A); % get full matrix from a sparse matrix 
+Descriptors.viSrc = viSrc;
+Descriptors.viTrg = viTrg;
+Descriptors.fi = fi;
+% Free memory
+clearvars -except Descr*
+viSrc = Descriptors.viSrc;
+viTrg = Descriptors.viTrg;
+fi = Descriptors.fi;
 
-%% Pyramid
-sigma = param.smooth_num_space;
-tau = param.smooth_num_time;
+numOfVert = numel(viSrc);
+Matches = zeros(numOfVert, 1);
+Distances = zeros(numOfVert, 1);
+for i = 1 : numOfVert
+    distance = Inf;
+    matchId = 0;
+    for j = 1 : numOfVert
+        newDistance = EuclideanHistogramNorm(DescriptorsSrc(i, :), DescriptorsTrg(j, :));
+        if(newDistance < distance)
+            distance = newDistance;
+            matchId = j;
+        end % if
+    end % for    
+    Matches(i) = matchId;
+    Distances(i) = distance;
+end % for
 
-vi = 263;
-%vi = 227;
-%vi = 257;
-%vi=143;
-fi = 2;
-% Apply threshold on minimal deformation value
-D_(D_ < param.strain_min) = 0.0;
-[HoG, VolumeWithPrincipalValues] = DescriptorFine(objseq.vertices, D_, A, vi, fi, sigma, tau, param);
-HoP = DescriptorPrincipalAxes(objseq.vertices, objseq.triangles, VolumeWithPrincipalValues, E, A, vi, fi, sigma, tau, param);
+[viSrc Matches Distances]
 
-%save('HorseDescriptor.mat', 'HistogramsGradients', 'HistogramsPrincipalAxes');
-%save('CamelDescriptor.mat', 'HistogramsGradients', 'HistogramsPrincipalAxes');
 
-%H2 = Descriptor(objseq.vertices, objseq, D_, A, 20, 2, sigma, tau);
-%H1-H2

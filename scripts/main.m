@@ -5,7 +5,7 @@ function [] = main()
 load_coretools();
 
 % Load configuration
-param = config('cylinder');
+param = config('horse');
 
 
 

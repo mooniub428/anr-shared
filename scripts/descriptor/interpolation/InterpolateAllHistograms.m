@@ -3,7 +3,7 @@
 function [Histograms] = InterpolateAllHistograms(Histograms)
     for i = 1 : 8
         H = InterpolateSingleHistogram(cell2mat(Histograms(i)));
-        Histograms(i) = mat2cell(H);
+        Histograms(i) = {H};
     end % for
 end % function
 

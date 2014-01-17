@@ -12,7 +12,7 @@ global useHoG;
 global useHoP;
 global numOfBins;
 smoothingStrength = 0.5;
-DescrUseEMD = true;
+DescrUseEMD = false;
 useHoG = true;
 useHoP = false;
 numOfBins = 10;

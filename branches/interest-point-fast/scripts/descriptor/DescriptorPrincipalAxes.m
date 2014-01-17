@@ -26,7 +26,8 @@ function [Histograms] = DescriptorPrincipalAxes(Vertices, Triangles, VolumeWithD
     
     % Get dominant orientation with respect to gradients of surfaces
     % deformation values
-    numOfBins = 18;
+    global numOfBins;
+    %numOfBins = 18;
     orientation = GetOrientationVectorField(DenseLocalPatchFlat, numOfBins, spaceStep);
 
     LocalPatchFlat = TranslateRotateScaleVectorField(LocalPatchFlat, orientation);

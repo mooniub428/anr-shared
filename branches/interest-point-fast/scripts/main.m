@@ -5,7 +5,7 @@ function [] = main()
 load_coretools();
 
 % Load configuration
-param = config('camel');
+param = config('cylinder');
 
 
 

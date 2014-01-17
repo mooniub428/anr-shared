@@ -1,3 +1,5 @@
+
+
 function [Histograms] = InterpolateAllHistograms(Histograms)
     for i = 1 : 8
         H = InterpolateSingleHistogram(cell2mat(Histograms(i)));
@@ -20,7 +22,8 @@ function [H] = InterpolateSingleHistogram(H)
         end % for
     end % for     
     
-    X = smoothhist2D(X, 0.5, [numRows numCols], [], 'surf');
+    global smoothingStrength;
+    H = smoothhist2D(X, smoothingStrength, [numRows numCols], [], 'surf');
     
     %x = row;
     %y = col;    

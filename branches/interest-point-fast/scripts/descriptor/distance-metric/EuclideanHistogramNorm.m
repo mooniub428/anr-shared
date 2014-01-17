@@ -23,7 +23,19 @@ for i = 1 : numOfOctants
     HoGDiff = reshape(HoGDiff, size(HoGDiff, 1) * size(HoGDiff, 2), 1);
     HoPDiff = reshape(HoPDiff, size(HoPDiff, 1) * size(HoPDiff, 2), 1);
     
-    euclideanNorm = euclideanNorm + norm([HoGDiff; HoPDiff]);
+    global useHoG;
+    global useHoP;
+    if(useHoG)
+        normHoG = norm(HoGDiff);
+    else
+        normHoG = 0.0;
+    end % if    
+    if(useHoP)
+        normHoP = norm(HoPDiff);
+    else
+        normHoP = 0.0;
+    end % if
+    euclideanNorm = euclideanNorm + normHoG + normHoP;
 end % for
 
 end % function

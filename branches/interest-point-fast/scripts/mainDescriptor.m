@@ -11,11 +11,13 @@ global smoothingStrength;
 global useHoG;
 global useHoP;
 global numOfBins;
+global normalizeSolidAngle;
 smoothingStrength = 0.3;
 DescrUseEMD = false;
 useHoG = true;
 useHoP = true;
 numOfBins = 10;
+normalizeSolidAngle = false;
 
 
 viSrc = [263 245 479 299 293 251]';

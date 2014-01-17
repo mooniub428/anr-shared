@@ -35,7 +35,7 @@ for i = 1 : numOfOctants
     else
         normHoP = 0.0;
     end % if
-    euclideanNorm = euclideanNorm + normHoG + normHoP;
+    euclideanNorm = euclideanNorm + 0.9 * normHoG + 0.1 * normHoP;
 end % for
 
 end % function

@@ -21,9 +21,18 @@ for i = 1 : numOfVert
     [HoG, VolumeWithDenselValues] = DescriptorFine(objseq.vertices, D_, A, vi, fi, sigma_, tau_, param);    
     HoP = DescriptorPrincipalAxes(objseq.vertices, objseq.triangles, VolumeWithDenselValues, E, A, vi, fi, sigma_, tau_, param);
     
+    numOfOctants = size(HoG, 1);
+    if(param.normalize_solid_angle)
+        for i = 1 : numOfOctants
+            HoG(i, 1) = NormalizeSolidAngle(HoG(i, 1));
+            HoP(i, 1) = NormalizeSolidAngle(HoP(i, 1));
+        end % for
+    end % if
     if(param.group_collinear)
-        GroupCollinear(HoG);
-        GroupCollinear(HoP);
+        for i = 1 : numOfOctants
+            %HoG(i, 1) = GroupCollinear(HoG(i, 1));
+            HoP(i, 1) = GroupCollinear(HoP(i, 1));
+        end % for        
     end % if
     
     Descriptors(i, 1) = {HoG};

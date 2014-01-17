@@ -23,6 +23,7 @@ param.generate_splines = false;
 
 % Histograms
 param.group_collinear = false;
+param.normalize_solid_angle = false;
 
 param.diag_DoG = false;
 param.extended_DoG = true;

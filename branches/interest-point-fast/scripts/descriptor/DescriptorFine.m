@@ -2,7 +2,7 @@ function [Histograms, Volume] = DescriptorFine(Vertices, DeformScalar, Adj, vi, 
     % Get local surface patch at characteristic scales
     [SurfPatch, Frames] = GetSurfacePatch(Vertices, Adj, vi, fi, sigma, tau);
     % Flattening stage
-    SurfPatch.XYZ
+    SurfPatch.XYZ;
     XY = pca(SurfPatch.XYZ, 2);
     SurfPatchFlat.XYZ = [XY zeros(size(XY, 1), 1)]; 
     SurfPatchFlat.ID =  SurfPatch.ID;     

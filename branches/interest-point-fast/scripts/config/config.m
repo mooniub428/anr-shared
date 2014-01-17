@@ -21,6 +21,9 @@ param.ws = 1; % space window size (ring unit)
 param.interpolate_3d = true;
 param.generate_splines = false;
 
+% Histograms
+param.group_collinear = false;
+
 param.diag_DoG = false;
 param.extended_DoG = true;
 param.space_DoG = false;

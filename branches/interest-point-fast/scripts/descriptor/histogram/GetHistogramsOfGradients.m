@@ -3,7 +3,7 @@ function [Histograms] = GetHistogramsOfGradients(GradientsFull, Volume, numOfBin
     Histograms = cell(8, 1);
     % Init histograms
     for i = 1 : 8        
-        Histograms(i) = mat2cell(zeros(numOfBins, numOfBins/2));        
+        Histograms(i) = {zeros(numOfBins, numOfBins/2)};        
     end % for
     
     % Number of points/samples in which gradients were estimated

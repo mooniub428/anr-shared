@@ -7,9 +7,6 @@ addpath('../tools/color');
 addpath('../tools/config');
 addpath('../tools/export');
 addpath('../tools/geod');
-addpath('../tools/interpolation-toolkit');
-addpath('../tools/interpolation-toolkit/rbf');
-addpath('../tools/interpolation-toolkit/kriging');
 addpath('../tools/obj');
 addpath('../tools/objseq');
 

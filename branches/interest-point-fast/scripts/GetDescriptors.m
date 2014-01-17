@@ -20,6 +20,12 @@ for i = 1 : numOfVert
     vi = viList(i);    
     [HoG, VolumeWithDenselValues] = DescriptorFine(objseq.vertices, D_, A, vi, fi, sigma_, tau_, param);    
     HoP = DescriptorPrincipalAxes(objseq.vertices, objseq.triangles, VolumeWithDenselValues, E, A, vi, fi, sigma_, tau_, param);
+    
+    if(param.group_collinear)
+        GroupCollinear(HoG);
+        GroupCollinear(HoP);
+    end % if
+    
     Descriptors(i, 1) = {HoG};
     Descriptors(i, 2) = {HoP};
 end % for

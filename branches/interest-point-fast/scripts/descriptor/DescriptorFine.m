@@ -33,7 +33,7 @@ function [SurfPatch, Frames] = GetSurfacePatch(Vertices, Adj, vi, fi, sigma, tau
     numVertices = size(Vertices, 1);
        
     %ID = find(Adj(:, vi));
-    ID = GetNRing(Adj, vi, 2)
+    ID = GetNRing(Adj, vi, 2);
     ID = ID(ID~=vi);
     XYZ = Vertices(ID, :);
         

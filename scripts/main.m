@@ -5,11 +5,14 @@ function [] = main()
 load_coretools();
 
 % Load configuration
-param = config('cylinder');
+param = config('camel');
+
+
+
 
 %% Surface deformation
 
-matlabpool open 8;
+%matlabpool open 8;
 
 % Transform obj sequence into matlab readable format and load it (conditional)
 objseq = objseq2mat(param);
@@ -21,7 +24,7 @@ if(param.region_deformation)
     [D] = VertRegionDeformation(objseq.V, objseq.triangles, rgnRad, objseq.Gd);
     D_ = D;
 else
-    [D] = recompute_strain(objseq.V, objseq.triangles, objseq.n_f, objseq.n_t);
+    [D, E] = recompute_strain(objseq.V, objseq.triangles, objseq.n_f, objseq.n_t);
     % Switch from triangle to vertex strain formulation
     D_ = tri2vert_strain(D, objseq.triangles, objseq.n_v, objseq.n_f); 
 end % if
@@ -29,6 +32,7 @@ end % if
 %% Adjacency
 A = triangulation2adjacency(objseq, param, D_);
 %A = full(A); % get full matrix from a sparse matrix 
+
 
 %% Pyramid
 sigma = param.smooth_num_space;
@@ -46,6 +50,8 @@ disp('Pyramid ::');
 pyramid = do_time_smoothing(pyramid, D_, tau, param.wt); 
 pyramid = do_space_smoothing(pyramid, A, D_, sigma, tau, param.ws); 
 
+
+
 %% Feature response
 disp('Feature response ::');
 if(param.diag_DoG)
@@ -59,7 +65,7 @@ end % if
 %  save('Camel.mat',  'A', 'eps', 'objseq', 'param', 'response', 'sigma', 'tau', '-v7.3')
 clear 'pyramid' 'D' 'D_';
 %% Interest point extraction
-eps = 0.9; % threshold 
+eps = 0.01; % threshold 
 IP = detect_interest_point(response, A, objseq.n_v, objseq.n_f, sigma, tau, eps, param.step);
 
 alg_elapsed_time = toc;
@@ -68,7 +74,7 @@ alg_elapsed_time = toc;
 save_interest_point(objseq, param, response, IP, sigma, tau); % save a sequence of OBJ files representing interest points
 
 % Shut down Matlab workers
-matlabpool close;
+%matlabpool close;
 
 alg_elapsed_time
 

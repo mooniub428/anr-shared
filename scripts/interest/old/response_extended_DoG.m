@@ -28,6 +28,7 @@ for t_i = step + 1 : step : tau - step
         [S21, ~] = get_at_scale(n_v, pyramid, s_i, t_i + step, sigma, tau); % Bottom
         
         feat_response = abs(S22 + S11 - S12 - S21);
+        feat_response = abs(S12 - S11);
         response(from_id : to_id, :) = feat_response;                           
     end % for
 end % for

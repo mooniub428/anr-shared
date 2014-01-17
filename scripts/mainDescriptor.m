@@ -11,15 +11,15 @@ global smoothingStrength;
 global useHoG;
 global useHoP;
 global numOfBins;
-smoothingStrength = 0.5;
+smoothingStrength = 0.3;
 DescrUseEMD = false;
 useHoG = true;
-useHoP = false;
+useHoP = true;
 numOfBins = 10;
 
 
-viSrc = [263 245 479 299 2]';
-viTrg = [227 198 395 262 2]';
+viSrc = [263 245 479 299 293 251]';
+viTrg = [227 198 395 262 257 215]';
 fi = 23;
 
 DescriptorsSrc = GetDescriptors(dataNameSrc, viSrc, fi);

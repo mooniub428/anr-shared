@@ -16,7 +16,8 @@ function [Histograms, Volume] = DescriptorFine(Vertices, DeformScalar, Adj, vi, 
     
     % Get dominant orientation with respect to gradients of surfaces
     % deformation values
-    numOfBins = 18;
+    global numOfBins;
+    %numOfBins = 10;
     orientation = GetOrientationScalarField(DenseSurfPatchFlat, numOfBins, spaceStep);
 
     SurfPatchFlat = TranslateRotateScaleScalarField(SurfPatchFlat, orientation);

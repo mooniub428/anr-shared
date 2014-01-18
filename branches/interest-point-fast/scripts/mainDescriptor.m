@@ -18,11 +18,21 @@ useHoG = true;
 useHoP = true;
 numOfBins = 10;
 normalizeSolidAngle = false;
+crossValidation = false;
 
 
-viSrc = [263 245 479 299 293 251]';
+viSrc = [263 245 478 299 293 251]';
 viTrg = [227 198 395 262 257 215]';
 fi = 23;
+
+if(crossValidation)
+    swap = viSrc;
+    viSrc = viTrg;
+    viTrg = swap;
+    swap = dataNameSrc;
+    dataNameSrc = dataNameTrg;
+    dataNameTrg = swap;
+end % if
 
 DescriptorsSrc = GetDescriptors(dataNameSrc, viSrc, fi);
 DescriptorsTrg = GetDescriptors(dataNameTrg, viTrg, fi);

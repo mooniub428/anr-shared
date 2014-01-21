@@ -5,7 +5,7 @@ function [] = main()
 load_coretools();
 
 % Load configuration
-param = config('horse');
+param = config('flag');
 
 
 
@@ -51,7 +51,6 @@ pyramid = do_time_smoothing(pyramid, D_, tau, param.wt);
 pyramid = do_space_smoothing(pyramid, A, D_, sigma, tau, param.ws); 
 
 
-
 %% Feature response
 disp('Feature response ::');
 if(param.diag_DoG)
@@ -62,13 +61,19 @@ else % param.space_DoG = true;
     response = response_space_DoG(pyramid, objseq.n_v, objseq.n_f, sigma, tau, param);
 end % if
 
+
 %  save('Camel.mat',  'A', 'eps', 'objseq', 'param', 'response', 'sigma', 'tau', '-v7.3')
 clear 'pyramid' 'D' 'D_';
 %% Interest point extraction
 eps = 0.01; % threshold 
 IP = detect_interest_point(response, A, objseq.n_v, objseq.n_f, sigma, tau, eps, param.step);
+%IP = detect_interest_point_minima(response, A, objseq.n_v, objseq.n_f, sigma, tau, eps, param.step);
 
 alg_elapsed_time = toc;
+
+alg_elapsed_time
+
+numOfIP = sum(sum(IP))
 
 %export_interest_point(objseq, param, IP, sigma, tau);
 save_interest_point(objseq, param, response, IP, sigma, tau); % save a sequence of OBJ files representing interest points
@@ -76,9 +81,7 @@ save_interest_point(objseq, param, response, IP, sigma, tau); % save a sequence 
 % Shut down Matlab workers
 %matlabpool close;
 
-alg_elapsed_time
 
-numOfIP = sum(sum(IP))
 
 end % function
 

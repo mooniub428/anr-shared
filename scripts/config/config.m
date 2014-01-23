@@ -12,8 +12,8 @@ param.region_deformation = false;
 %param.smooth_num = 12; % Total number of octaves: smooth_num x smooth_num (recommended to be < 50) 
 
 % Important moving average parameters
-param.smooth_num_space = 10;
-param.smooth_num_time = 10;
+param.smooth_num_space = 8;
+param.smooth_num_time = 8;
 param.wt = 3; % time window size
 param.ws = 1; % space window size (ring unit)
 

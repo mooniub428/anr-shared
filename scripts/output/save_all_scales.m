@@ -42,7 +42,7 @@ if(IP_count > 0)
 
     end % for
     
-    export_IP_index(export_dir, VIndex, J, response, IP, ST);
+    export_IP_index(export_dir, VIndex, J, response, IP, ST, 0);
     
     % Export interest points accroding to matrices T, S, C
     opacity = 0.3;

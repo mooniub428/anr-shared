@@ -13,7 +13,9 @@ for t_i = 2 : max_tau
         [S12, ~] = get_at_scale(n_v, pyramid, s_i - 1, t_i , sigma, tau); % Left-Bottom        
         [S21, ~] = get_at_scale(n_v, pyramid, s_i, t_i - 1, sigma, tau); % Bottom
         
-        feat_response = abs(S22 + S11 - S12 - S21);            
+        feat_response = abs(S22 + S11 - S12 - S21);  
+        %feat_response = abs(S22 - S12);
+        %feat_response = abs(S22 - S21);
         response(from_id : to_id, :) = feat_response;                           
     end % for
 end % for

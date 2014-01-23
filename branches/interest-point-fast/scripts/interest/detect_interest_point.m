@@ -2,31 +2,52 @@ function [IP] = detect_interest_point(response, A, n_v, n_f, sigma, tau, eps, st
 
 disp('Detect interest points ::');
 
-max_tau = tau;
-max_sigma = sigma;
-sigma = sigma + 1;
-tau = tau + 1;
-   
+param = config('');
+
+if(param.correct_indexing)
+	max_sigma = sigma;
+	sigma = sigma + 1;
+	max_tau = tau;
+	tau = tau + 1;    
+end % if
 
 % Interest points
 IP = zeros(n_v * sigma * tau, n_f);
 
-for t_i = 2 : max_tau
-    for s_i = 2 : max_sigma
+for t_i = 2  : max_tau
+    for s_i = 2  : max_sigma
         %% Extrema in scale
         [L, from_id_, to_id_] = get_at_scale(n_v, response, s_i, t_i, sigma, tau); % Center
         
         B = zeros(n_v, n_f); % Boolean matrix to indicate interest points
                         
         [L1, ~] = get_at_scale(n_v, response, s_i-1, t_i-1, sigma, tau); % Left-Up
+        B1 = ((L - L1) <= 0);
+        
         [L2, ~] = get_at_scale(n_v, response, s_i-1, t_i, sigma, tau); % Left
-        [L3, ~] = get_at_scale(n_v, response, s_i-1, t_i+1, sigma, tau); % Left-Bottom        
+        B2 = ((L - L2) <= 0);
+        
+        [L3, ~] = get_at_scale(n_v, response, s_i-1, t_i+1, sigma, tau); % Left-Bottom
+        B3 = ((L - L3) <= 0);
+        
         [L4, ~] = get_at_scale(n_v, response, s_i, t_i+1, sigma, tau); % Bottom
+        B4 = ((L - L4) <= 0);
         
         [L5, ~] = get_at_scale(n_v, response, s_i+1, t_i+1, sigma, tau); % Bottom-Right
+        B5 = ((L - L5) <= 0);
+        
         [L6, ~] = get_at_scale(n_v, response, s_i+1, t_i, sigma, tau); % Right
+        B6 = ((L - L6) <= 0);
+        
         [L7, ~] = get_at_scale(n_v, response, s_i+1, t_i-1, sigma, tau); % Right-Up
+        B7 = ((L - L7) <= 0);
+        
         [L8, ~] = get_at_scale(n_v, response, s_i, t_i-1, sigma, tau); % Up                        
+        B8 = ((L - L8) <= 0);
+        
+        B0 = (L <= eps);
+        X32 = reshape (L, 1, size(L,1)*size(L,2));
+        thresholds = prctile(X32,[5 99.5]); 
         
         B = ((L - L1) <= 0) + ((L - L2) <= 0) + ((L - L3) <= 0) + ...
             + ((L - L4) <= 0) + ((L - L5) <= 0) + ((L - L6) <= 0) + ...
@@ -52,6 +73,10 @@ for t_i = 2 : max_tau
         end % for        
         
         %gather(B);
+        
+        %% SHW: Eliminate all IP's at the first and the last frame
+        B(:,1) = 1;
+        B(:,n_f) = 1;
         
         %% 
         IP(from_id_ : to_id_, :) = (B == 0);

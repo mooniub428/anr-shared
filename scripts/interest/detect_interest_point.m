@@ -14,35 +14,36 @@ end % if
 % Interest points
 IP = zeros(n_v * sigma * tau, n_f);
 
-for t_i = 2  : max_tau
-    for s_i = 2  : max_sigma
+step = param.step;
+for t_i = step + 1  : step : max_tau - step
+    for s_i = step + 1  : step : max_sigma - step
         %% Extrema in scale
         [L, from_id_, to_id_] = get_at_scale(n_v, response, s_i, t_i, sigma, tau); % Center
         
         B = zeros(n_v, n_f); % Boolean matrix to indicate interest points
                         
-        [L1, ~] = get_at_scale(n_v, response, s_i-1, t_i-1, sigma, tau); % Left-Up
+        [L1, ~] = get_at_scale(n_v, response, s_i-step, t_i-step, sigma, tau); % Left-Up
         B1 = ((L - L1) <= 0);
         
-        [L2, ~] = get_at_scale(n_v, response, s_i-1, t_i, sigma, tau); % Left
+        [L2, ~] = get_at_scale(n_v, response, s_i-step, t_i, sigma, tau); % Left
         B2 = ((L - L2) <= 0);
         
-        [L3, ~] = get_at_scale(n_v, response, s_i-1, t_i+1, sigma, tau); % Left-Bottom
+        [L3, ~] = get_at_scale(n_v, response, s_i-step, t_i+step, sigma, tau); % Left-Bottom
         B3 = ((L - L3) <= 0);
         
-        [L4, ~] = get_at_scale(n_v, response, s_i, t_i+1, sigma, tau); % Bottom
+        [L4, ~] = get_at_scale(n_v, response, s_i, t_i+step, sigma, tau); % Bottom
         B4 = ((L - L4) <= 0);
         
-        [L5, ~] = get_at_scale(n_v, response, s_i+1, t_i+1, sigma, tau); % Bottom-Right
+        [L5, ~] = get_at_scale(n_v, response, s_i+step, t_i+step, sigma, tau); % Bottom-Right
         B5 = ((L - L5) <= 0);
         
-        [L6, ~] = get_at_scale(n_v, response, s_i+1, t_i, sigma, tau); % Right
+        [L6, ~] = get_at_scale(n_v, response, s_i+step, t_i, sigma, tau); % Right
         B6 = ((L - L6) <= 0);
         
-        [L7, ~] = get_at_scale(n_v, response, s_i+1, t_i-1, sigma, tau); % Right-Up
+        [L7, ~] = get_at_scale(n_v, response, s_i+step, t_i-step, sigma, tau); % Right-Up
         B7 = ((L - L7) <= 0);
         
-        [L8, ~] = get_at_scale(n_v, response, s_i, t_i-1, sigma, tau); % Up                        
+        [L8, ~] = get_at_scale(n_v, response, s_i, t_i-step, sigma, tau); % Up                        
         B8 = ((L - L8) <= 0);
         
         B0 = (L <= eps);
@@ -65,10 +66,18 @@ for t_i = 2  : max_tau
         % 2. Space
         for v_i = 1 : n_v
             adj = find(A(v_i, :) > 0);
-            adj = adj'; % to column vector          
+            adj = adj'; % to column vector                      
+            
+            nadj = size(adj, 2);
             
             for f_i = 1 : n_f
                 B(v_i, f_i) = B(v_i, f_i) + (L(v_i, f_i) - max(L(adj, f_i)) <= 0);   
+                if(f_i > 1)
+                    B(v_i, f_i) = B(v_i, f_i) + (L(v_i, f_i) - max(L(adj, f_i - 1)) <= 0);   
+                end % if
+                if(f_i < n_f)
+                    B(v_i, f_i) = B(v_i, f_i) + (L(v_i, f_i) - max(L(adj, f_i + 1)) <= 0);   
+                end % if
             end % for            
         end % for        
         

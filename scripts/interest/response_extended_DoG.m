@@ -6,16 +6,20 @@ max_sigma = sigma;
 sigma = sigma + 1;
 max_tau = tau;
 tau = tau + 1;
-for t_i = 2 : max_tau
-    for s_i = 2 : max_sigma
+step = param.step;
+for t_i = step + 1 : step : max_tau
+    for s_i = step + 1 : step : max_sigma
         [S22, from_id, to_id] = get_at_scale(n_v, pyramid, s_i, t_i, sigma, tau); % Left-Up
-        [S11, ~] = get_at_scale(n_v, pyramid, s_i - 1, t_i - 1, sigma, tau); % Left
-        [S12, ~] = get_at_scale(n_v, pyramid, s_i - 1, t_i , sigma, tau); % Left-Bottom        
-        [S21, ~] = get_at_scale(n_v, pyramid, s_i, t_i - 1, sigma, tau); % Bottom
+        [S11, ~] = get_at_scale(n_v, pyramid, s_i - step, t_i - step, sigma, tau); % Left
+        [S12, ~] = get_at_scale(n_v, pyramid, s_i - step, t_i , sigma, tau); % Left-Bottom        
+        [S21, ~] = get_at_scale(n_v, pyramid, s_i, t_i - step, sigma, tau); % Bottom
         
-        feat_response = abs(S22 + S11 - S12 - S21);  
+        %feat_response = abs(S22 + S11 - S12 - S21);  
         %feat_response = abs(S22 - S12);
         %feat_response = abs(S22 - S21);
+        %feat_response = S22 - S11;
+        feat_response = 2*S22 - S12 - S21;
+        
         response(from_id : to_id, :) = feat_response;                           
     end % for
 end % for
